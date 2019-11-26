@@ -5,7 +5,7 @@ import store from './store'
 
 import axios from 'axios'
 
-import '../util/veevalidate-i18n'
+import '@/util/veevalidate-i18n'
 Vue.config.productionTip = false
 
 axios.defaults.baseURL =

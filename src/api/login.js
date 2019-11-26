@@ -1,16 +1,7 @@
-import axios from 'axios'
+import axios from '@/util/request'
 // 图形验证码接口
 const getCode = async () => {
-  let result = ''
-  try {
-    result = await axios.get('/getCaptcha')
-    if (result.status === 200) {
-      return result.data
-    }
-  } catch (e) {
-    console.log(e)
-  }
-  return result
+  return axios.get('/getCaptcha')
 }
 
 // 忘记密码
