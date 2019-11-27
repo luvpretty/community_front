@@ -1,7 +1,11 @@
 import axios from '@/util/request'
 // 图形验证码接口
-const getCode = async () => {
-  return axios.get('/getCaptcha')
+const getCode = async (sid) => {
+  return axios.get('/getCaptcha', {
+    params: {
+      sid
+    }
+  })
 }
 
 // 忘记密码
@@ -19,4 +23,11 @@ const forget = async (option) => {
   }
   return result
 }
-export { getCode, forget }
+
+const login = (loginInfo) => {
+  return axios.post('/login', {
+    ...loginInfo
+  })
+}
+
+export { getCode, forget, login }

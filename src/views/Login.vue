@@ -9,6 +9,7 @@
           </li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+          <validation-observer ref="observer" v-slot="{ validate }">
           <div class="layui-tab-item layui-show">
             <div class="layui-form layui-form-pane">
               <form method="post">
@@ -74,7 +75,7 @@
 
                 </div>
                 <div class="layui-form-item">
-                  <button class="layui-btn">立即登录</button>
+                  <button class="layui-btn" type="button" @click="validate().then(submit)">立即登录</button>
                   <span style="padding-left:20px;">
                     <router-link :to="{name: 'forget'}">忘记密码？</router-link>
                   </span>
@@ -97,6 +98,7 @@
               </form>
             </div>
           </div>
+          </validation-observer>
         </div>
       </div>
     </div>
@@ -104,12 +106,14 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate'
-import { getCode } from '@/api/login'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { getCode, login } from '@/api/login'
+import uuid from 'uuid/v4'
 export default {
   name: 'login',
   components: {
-    ValidationProvider
+    ValidationProvider,
+    ValidationObserver
   },
   data () {
     return {
@@ -120,15 +124,42 @@ export default {
     }
   },
   mounted () {
+    let sid = ''
+    if (localStorage.getItem('sid')) {
+      sid = localStorage.getItem('sid')
+    } else {
+      sid = uuid()
+      localStorage.setItem('sid', sid)
+    }
+    this.$store.commit('setSid', sid)
+    console.log(sid)
     this._getCode()
   },
   methods: {
     // 接受后端图形验证码内容
     _getCode () {
-      getCode().then((res) => {
+      let sid = this.$store.state.sid
+      getCode(sid).then((res) => {
         console.log(res)
         if (res.code === 200) {
           this.svg = res.data
+        }
+      })
+    },
+    async submit () {
+      const isValid = await this.$refs.observer.validate()
+      if (!isValid) {
+        return
+      }
+      console.log('submit seccess')
+      login({
+        username: this.username,
+        password: this.password,
+        code: this.code,
+        sid: this.$store.state.sid
+      }).then((res) => {
+        if (res.code === 200) {
+          console.log(res)
         }
       })
     }
