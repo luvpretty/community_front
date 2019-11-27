@@ -127,9 +127,11 @@ export default {
     let sid = ''
     if (localStorage.getItem('sid')) {
       sid = localStorage.getItem('sid')
+      console.log('aaa')
     } else {
       sid = uuid()
       localStorage.setItem('sid', sid)
+      console.log('bbb')
     }
     this.$store.commit('setSid', sid)
     console.log(sid)
