@@ -17,7 +17,7 @@ const getCode = async (sid) => {
 const forget = async (option) => {
   let result = ''
   try {
-    result = await axios.post('/forget', {
+    result = await axios.post('/login/forget', {
       ...option
     })
     if (result.status === 200) {
