@@ -9,7 +9,8 @@
           <li class="layui-this">注册</li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
-          <div class="layui-tab-item layui-show">
+          <validation-observer ref="observer" v-slot="{ validate }">
+            <div class="layui-tab-item layui-show">
             <div class="layui-form layui-form-pane">
               <form method="post">
                 <div class="layui-form-item">
@@ -25,6 +26,7 @@
                       class="layui-input"
                     />
                   </div>
+                  <div class="layui-form-mid layui-word-aux">将会成为您唯一的登入名</div>
                   <div class="layui-form-mid">
                     <span style="color: #c00;">{{errors[0]}}</span>
                   </div>
@@ -61,6 +63,7 @@
                       class="layui-input"
                     />
                   </div>
+                  <div class="layui-form-mid layui-word-aux">6到16位字符</div>
                   <div class="layui-form-mid">
                     <span style="color: #c00;">{{errors[0]}}</span>
                   </div>
@@ -108,7 +111,8 @@
                   </validation-provider>
                   </div>
                 <div class="layui-form-item">
-                  <button class="layui-btn" lay-filter="*" lay-submit>立即注册</button>
+                  <button class="layui-btn" type="button" @click="validate().then
+                  (submit)">立即注册</button>
                 </div>
                 <div class="layui-form-item fly-form-app">
                   <span>或者直接使用社交账号快捷注册</span>
@@ -128,6 +132,7 @@
               </form>
             </div>
           </div>
+          </validation-observer>
         </div>
       </div>
     </div>
@@ -135,12 +140,13 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate'
-import { getCode } from '@/api/login'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { getCode, reg } from '@/api/login'
 export default {
   name: 'reg',
   components: {
-    ValidationProvider
+    ValidationProvider,
+    ValidationObserver
   },
   data () {
     return {
@@ -158,10 +164,42 @@ export default {
   methods: {
     // 接受后端图形验证码内容
     _getCode () {
-      getCode().then((res) => {
+      let sid = this.$store.state.sid
+      getCode(sid).then((res) => {
         console.log(res)
         if (res.code === 200) {
           this.svg1 = res.data
+        }
+      })
+    },
+    async submit () {
+      const isValid = await this.$refs.observer.validate()
+      if (!isValid) {
+        return
+      }
+      reg({
+        email: this.email,
+        password: this.password,
+        nickname: this.nickname,
+        vercode: this.vercode,
+        sid: this.$store.state.sid
+      }).then((res) => {
+        console.log(res)
+        if (res.code === 200) {
+          this.email = ''
+          this.password = ''
+          this.repass = ''
+          this.nickname = ''
+          this.vercode = ''
+          console.log('aaaaa')
+          requestAnimationFrame(() => {
+            this.$refs.observer.reset()
+          })
+          // 跳转到登录界面，让用户登录
+          this.$router.push('/login')
+        } else {
+          // 返回用户名已经注册
+          this.$refs.observer.setErrors(res.msg)
         }
       })
     }

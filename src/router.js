@@ -18,7 +18,15 @@ export default new Router({
     {
       path: '/reg',
       name: 'reg',
-      component: Reg
+      component: Reg,
+      // 禁止用户直接访问注册页面
+      beforeEnter: (to, from, next) => {
+        if (from.name === 'login') {
+          next()
+        } else {
+          next('/login')
+        }
+      }
     },
     {
       path: '/forget',
