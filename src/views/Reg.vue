@@ -14,13 +14,13 @@
             <div class="layui-form layui-form-pane">
               <form method="post">
                 <div class="layui-form-item">
-                  <label for="L_email" class="layui-form-label">邮箱</label>
+                  <label for="L_email" class="layui-form-label">用户名</label>
                   <validation-provider rules="required|min:6" name="email" v-slot="{ errors }">
                   <div class="layui-input-inline">
                     <input
                       type="email"
                       name="email"
-                      v-model="email"
+                      v-model="username"
                       placeholder="请输入邮箱"
                       autocomplete="off"
                       class="layui-input"
@@ -150,7 +150,7 @@ export default {
   },
   data () {
     return {
-      email: '',
+      username: '',
       password: '',
       nickname: '',
       repass: '',
@@ -178,7 +178,7 @@ export default {
         return
       }
       reg({
-        email: this.email,
+        username: this.username,
         password: this.password,
         nickname: this.nickname,
         vercode: this.vercode,
@@ -186,7 +186,7 @@ export default {
       }).then((res) => {
         console.log(res)
         if (res.code === 200) {
-          this.email = ''
+          this.username = ''
           this.password = ''
           this.repass = ''
           this.nickname = ''
@@ -196,7 +196,10 @@ export default {
             this.$refs.observer.reset()
           })
           // 跳转到登录界面，让用户登录
-          this.$router.push('/login')
+          this.$alert('注册成功')
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 1000)
         } else {
           // 返回用户名已经注册
           this.$refs.observer.setErrors(res.msg)
