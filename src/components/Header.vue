@@ -30,7 +30,7 @@
         <router-link to="" class="layui-nav-item">
           <a href="../user/login.html">登入</a>
         </router-link>
-        <router-link  class="layui-nav-item">
+        <router-link to="" class="layui-nav-item">
           <a href="../user/reg.html">注册</a>
         </router-link>
         <li class="layui-nav-item layui-hide-xs">
