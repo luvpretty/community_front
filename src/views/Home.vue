@@ -1,37 +1,42 @@
 <template>
   <div>
-<div class="fly-panel fly-column">
-  <div class="layui-container">
-    <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
-      <li><a href="">提问</a></li>
-      <li><a href="">分享<span class="layui-badge-dot"></span></a></li>
-      <li><a href="">讨论</a></li>
-      <li><a href="">建议</a></li>
-      <li><a href="">公告</a></li>
-      <li><a href="">动态</a></li>
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
-
-      <!-- 用户登入后显示 -->
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li>
-    </ul>
-
-    <div class="fly-column-right layui-hide-xs">
-      <span class="fly-search"><i class="layui-icon"></i></span>
-      <a href="" class="layui-btn">发表新帖</a>
+    <panel></panel>
+    <div class="layui-container">
+      <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+          <list></list>
+        </div>
+        <div class="layui-col-md4">
+          <tips></tips>
+          <sign></sign>
+          <hot-list></hot-list>
+          <ads></ads>
+          <links></links>
+        </div>
+      </div>
     </div>
-    <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-      <a href="" class="layui-btn">发表新帖</a>
-    </div>
-  </div>
-</div>
   </div>
 </template>
 
 <script>
+import Panel from '@/components/Panel'
+import List from '@/components/contents/List'
+import Tips from '@/components/sidebar/Tips'
+import Sign from '@/components/sidebar/Sign'
+import HotList from '@/components/sidebar/HotList'
+import Links from '@/components/sidebar/Links'
+import Ads from '@/components/sidebar/Ads'
 export default {
-  name: 'home'
+  name: 'home',
+  components: {
+    Panel,
+    List,
+    Tips,
+    Sign,
+    HotList,
+    Links,
+    Ads
+  }
 }
 </script>
 
