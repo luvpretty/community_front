@@ -89,8 +89,8 @@ export default {
   methods: {
     // 接受后端图形验证码内容
     _getCode () {
-      getCode().then((res) => {
-        console.log(res)
+      let sid = this.$store.state.sid
+      getCode(sid).then((res) => {
         if (res.code === 200) {
           this.svg = res.data
         }
@@ -101,9 +101,8 @@ export default {
         username: this.username,
         code: this.code
       }).then((res) => {
-        console.log(res)
         if (res.code === 200) {
-          alert('邮件发送成功')
+          this.$alert('注册码发送成功，请查收邮件！')
         }
       })
     }

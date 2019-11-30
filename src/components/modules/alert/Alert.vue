@@ -15,6 +15,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+/* eslint-enable camelcase */
 export default {
   props: {
     type: {

@@ -166,7 +166,6 @@ export default {
     _getCode () {
       let sid = this.$store.state.sid
       getCode(sid).then((res) => {
-        console.log(res)
         if (res.code === 200) {
           this.svg1 = res.data
         }
@@ -184,14 +183,12 @@ export default {
         vercode: this.vercode,
         sid: this.$store.state.sid
       }).then((res) => {
-        console.log(res)
         if (res.code === 200) {
           this.username = ''
           this.password = ''
           this.repass = ''
           this.nickname = ''
           this.vercode = ''
-          console.log('aaaaa')
           requestAnimationFrame(() => {
             this.$refs.observer.reset()
           })

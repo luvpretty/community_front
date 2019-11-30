@@ -133,7 +133,6 @@ export default {
       localStorage.setItem('sid', sid)
     }
     this.$store.commit('setSid', sid)
-    console.log(sid)
     this._getCode()
   },
   methods: {
@@ -141,7 +140,6 @@ export default {
     _getCode () {
       let sid = this.$store.state.sid
       getCode(sid).then((res) => {
-        console.log(res)
         if (res.code === 200) {
           this.svg = res.data
         }
@@ -152,7 +150,6 @@ export default {
       if (!isValid) {
         return
       }
-      console.log('submit seccess')
       login({
         username: this.username,
         password: this.password,
@@ -166,7 +163,6 @@ export default {
           requestAnimationFrame(() => {
             this.$refs.observer.reset()
           })
-          console.log(res)
         } else if (res.code === 401) {
           this.$refs.codefield.setErrors([res.msg])
         }
@@ -177,7 +173,6 @@ export default {
         } else {
           this.$alert('服务器错误')
         }
-        console.log(err.response)
       })
     }
   }
