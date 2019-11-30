@@ -1,27 +1,22 @@
 <template>
       <div class="fly-panel">
         <h3 class="fly-panel-title">温馨通道</h3>
-        <ul class="fly-panel-main fly-list-static">
-          <li>
-            <a href="/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
+        <div class="fly-panel-main layui-row">
+          <ul class="layui-clear quick">
+          <li class="layui-col-xs6">
+            <a href="" target="_blank">lupretty</a>
           </li>
-          <li>
-            <a href="/jie/5366/" target="_blank">
-              layui 常见问题的处理和实用干货集锦
-            </a>
+          <li class="layui-col-xs6">
+            <a href="" target="_blank">lupretty</a>
           </li>
-          <li>
-            <a href="/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
+          <li class="layui-col-xs6">
+            <a href="" target="_blank">lupretty</a>
           </li>
-          <li>
-            <a href="/jie/5366/" target="_blank">
-              layui 常见问题的处理和实用干货集锦
-            </a>
+          <li class="layui-col-xs6">
+            <a href="" target="_blank">lupretty</a>
           </li>
-          <li>
-            <a href="/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-          </li>
-        </ul>
+          </ul>
+        </div>
       </div>
 </template>
 
@@ -32,5 +27,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$border-color:#f2f2f2;
+.fly-panel-main {
+  padding: 15px;
+}
 
+.quick {
+  border: 1px solid $border-color;
+  border-bottom: none;
+  border-right: none;
+  .layui-col-xs6 {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    border: 1px solid $border-color;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border-left: none;
+    border-top: none;
+    a {
+      display: block;
+    }
+  }
+}
 </style>
