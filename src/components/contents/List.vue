@@ -20,11 +20,12 @@
           @click.prevent="search(4)">按热议</a>
           </span>
         </div>
-        <list-item></list-item>
+        <list-item :lists="lists" @nextpage="nextPage"></list-item>
       </div>
 </template>
 
 <script>
+import { getList } from '@/api/content'
 import ListItem from './ListItem'
 export default {
   name: 'list',
@@ -32,13 +33,63 @@ export default {
     return {
       status: '',
       tag: '',
-      sort: 'created'
+      sort: 'created',
+      page: 0,
+      limit: 20,
+      catalog: '',
+      lists: [{
+        uid: {
+          name: 'luvpretty',
+          isVip: 1
+        },
+        title: '大前端',
+        content: '',
+        created: '2019-10-01 01:00:00',
+        catalog: 'ask',
+        fav: 10,
+        isEnd: 0,
+        reads: 10,
+        answer: 0,
+        status: 0,
+        isTop: 0,
+        tags: [
+          {
+            name: '精华',
+            class: 'layui-bg-red'
+          },
+          {
+            name: '热门',
+            class: 'layui-bg-blue'
+          }
+        ]
+      }]
     }
   },
   components: {
     ListItem
   },
+  mounted () {
+    this._getLists()
+  },
   methods: {
+    _getLists () {
+      let options = {
+        catalog: this.catalog,
+        isTop: 0,
+        page: this.page,
+        limit: this.limit,
+        sort: this.sort,
+        tag: this.tag,
+        status: this.status
+      }
+      getList(options).then((res) => {
+        console.log(res)
+      })
+    },
+    nextPage () {
+      this.page++
+      this._getLists()
+    },
     search (val) {
       switch (val) {
         // 未结贴
