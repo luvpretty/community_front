@@ -11,8 +11,12 @@
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
 
       <!-- 用户登入后显示 -->
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li>
+      <template v-if="isLogin">
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
+            <a href="user/index.html">我发表的贴</a></li>
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
+            <a href="user/index.html#collection">我收藏的贴</a></li>
+      </template>
     </ul>
 
     <div class="fly-column-right layui-hide-xs">
@@ -63,7 +67,8 @@ export default {
           path: '/index/logs',
           isNew: false
         }
-      ]
+      ],
+      isLogin: this.$store.state.isLogin
     }
   }
 }
