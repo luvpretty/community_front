@@ -34,9 +34,10 @@
           </li>
         </ul>
         <div style="text-align: center" v-show="isShow">
-          <div class="laypage-main">
+          <div class="laypage-main" v-if="!isEnd">
             <a @click.prevent="more()" class="laypage-next">更多求解</a>
           </div>
+          <div class="nomore gray" v-else>没有更多了</div>
         </div>
   </div>
 </template>
@@ -48,12 +49,16 @@ import 'moment/locale/zh-cn'
 export default {
   name: 'listitem',
   props: {
-    'lists': {
+    lists: {
       default: () => [],
       type: Array
     },
     isShow: {
       default: true,
+      type: Boolean
+    },
+    isEnd: {
+      default: false,
       type: Boolean
     }
   },
@@ -103,5 +108,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nomore {
+  font-size: 16px;
+  padding: 30px 0;
+}
 
 </style>

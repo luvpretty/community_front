@@ -20,7 +20,7 @@
           @click.prevent="search(4)">按热议</a>
           </span>
         </div>
-        <list-item :lists="lists" @nextpage="nextPage"></list-item>
+        <list-item :lists="lists" @nextpage="nextPage" :isEnd="isEnd"></list-item>
       </div>
 </template>
 
@@ -31,38 +31,15 @@ export default {
   name: 'list',
   data () {
     return {
+      isEnd: false,
+      isRepeat: false,
       status: '',
       tag: '',
       sort: 'created',
       page: 0,
       limit: 20,
       catalog: '',
-      lists: [{
-        uid: {
-          name: 'luvpretty',
-          isVip: 1
-        },
-        title: '大前端',
-        content: '',
-        created: '2019-10-01 01:00:00',
-        catalog: 'ask',
-        fav: 10,
-        isEnd: 0,
-        reads: 10,
-        answer: 0,
-        status: 0,
-        isTop: 0,
-        tags: [
-          {
-            name: '精华',
-            class: 'layui-bg-red'
-          },
-          {
-            name: '热门',
-            class: 'layui-bg-blue'
-          }
-        ]
-      }]
+      lists: []
     }
   },
   components: {
@@ -73,6 +50,10 @@ export default {
   },
   methods: {
     _getLists () {
+      if (this.isRepeat) return
+      console.log(this.isEnd)
+      if (this.isEnd) return
+      this.isRepeat = true
       let options = {
         catalog: this.catalog,
         isTop: 0,
@@ -83,7 +64,28 @@ export default {
         status: this.status
       }
       getList(options).then((res) => {
+        // 加入一个请求锁，防止多次点击，等待数据返回再打开
+        this.isRepeat = false
         console.log(res)
+        // 判断lists长度是否为0，为0可以直接赋值
+        // 当lists长度不为0，后面请求的数据加入到lists中
+        // 非200错误处理
+        if (res.code === 200) {
+          // 判断res.data的长度，如果小于20条则为最后一页
+          if (res.data.length < this.limit) {
+            this.isEnd = true
+          }
+          if (this.lists.length === 0) {
+            this.lists = res.data
+          } else {
+            this.lists = this.lists.concat(res.data)
+          }
+        }
+      }).catch((err) => {
+        if (err) {
+          this.isRepeat = false
+          this.$alert(err.msg)
+        }
       })
     },
     nextPage () {
