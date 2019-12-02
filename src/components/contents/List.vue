@@ -39,11 +39,20 @@ export default {
       page: 0,
       limit: 10,
       catalog: '',
+      current: '',
       lists: []
     }
   },
   components: {
     ListItem
+  },
+  watch: {
+    current (newval, oldval) {
+      this.page = 0
+      this.isEnd = false
+      this.lists = []
+      this._getLists()
+    }
   },
   mounted () {
     this._getLists()
@@ -67,21 +76,20 @@ export default {
         // 加入一个请求锁，防止多次点击，等待数据返回再打开
         // this.isRepeat = false
         console.log(res)
-        this.lists = []
         // 判断lists长度是否为0，为0可以直接赋值
         // 当lists长度不为0，后面请求的数据加入到lists中
         // 非200错误处理
-        // if (res.code === 200) {
-        //   // 判断res.data的长度，如果小于20条则为最后一页
-        //   if (res.data.length < this.limit) {
-        //     this.isEnd = true
-        //   }
-        //   if (this.lists.length === 0) {
-        //     this.lists = res.data
-        //   } else {
-        //     this.lists = this.lists.concat(res.data)
-        //   }
-        // }
+        if (res.code === 200) {
+          // 判断res.data的长度，如果小于20条则为最后一页
+          if (res.data.length < this.limit) {
+            this.isEnd = true
+          }
+          if (this.lists.length === 0) {
+            this.lists = res.data
+          } else {
+            this.lists = this.lists.concat(res.data)
+          }
+        }
       }).catch((err) => {
         console.log(err)
         if (err) {
@@ -91,10 +99,15 @@ export default {
       })
     },
     nextPage () {
-      // this.page++
+      this.page++
       this._getLists()
     },
     search (val) {
+      if (typeof val === 'undefined' && this.current === '') {
+        return
+      }
+      this.current = val
+      console.log(val)
       switch (val) {
         // 未结贴
         case 0:
@@ -122,6 +135,7 @@ export default {
         default:
           this.status = ''
           this.tag = ''
+          this.current = ''
       }
     }
   }
