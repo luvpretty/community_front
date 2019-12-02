@@ -48,16 +48,30 @@ export default {
   },
   watch: {
     current (newval, oldval) {
+      this.init()
+    },
+    '$route' (newval, oldval) {
+      let catalog = this.$route.params['catalog']
+      if (catalog !== '' && typeof catalog !== 'undefined') {
+        this.catalog = catalog
+      }
+      this.init()
+    }
+  },
+  mounted () {
+    let catalog = this.$route.params['catalog']
+    if (catalog !== '' && typeof catalog !== 'undefined') {
+      this.catalog = catalog
+    }
+    this._getLists()
+  },
+  methods: {
+    init () {
       this.page = 0
       this.isEnd = false
       this.lists = []
       this._getLists()
-    }
-  },
-  mounted () {
-    this._getLists()
-  },
-  methods: {
+    },
     _getLists () {
       // if (this.isRepeat) return
       console.log(this.isEnd)
