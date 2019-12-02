@@ -37,7 +37,7 @@ export default {
       tag: '',
       sort: 'created',
       page: 0,
-      limit: 20,
+      limit: 10,
       catalog: '',
       lists: []
     }
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     _getLists () {
-      if (this.isRepeat) return
+      // if (this.isRepeat) return
       console.log(this.isEnd)
       if (this.isEnd) return
       this.isRepeat = true
@@ -65,31 +65,33 @@ export default {
       }
       getList(options).then((res) => {
         // 加入一个请求锁，防止多次点击，等待数据返回再打开
-        this.isRepeat = false
+        // this.isRepeat = false
         console.log(res)
+        this.lists = []
         // 判断lists长度是否为0，为0可以直接赋值
         // 当lists长度不为0，后面请求的数据加入到lists中
         // 非200错误处理
-        if (res.code === 200) {
-          // 判断res.data的长度，如果小于20条则为最后一页
-          if (res.data.length < this.limit) {
-            this.isEnd = true
-          }
-          if (this.lists.length === 0) {
-            this.lists = res.data
-          } else {
-            this.lists = this.lists.concat(res.data)
-          }
-        }
+        // if (res.code === 200) {
+        //   // 判断res.data的长度，如果小于20条则为最后一页
+        //   if (res.data.length < this.limit) {
+        //     this.isEnd = true
+        //   }
+        //   if (this.lists.length === 0) {
+        //     this.lists = res.data
+        //   } else {
+        //     this.lists = this.lists.concat(res.data)
+        //   }
+        // }
       }).catch((err) => {
+        console.log(err)
         if (err) {
-          this.isRepeat = false
-          this.$alert(err.msg)
+          // this.isRepeat = false
+          this.$alert(err.message)
         }
       })
     },
     nextPage () {
-      this.page++
+      // this.page++
       this._getLists()
     },
     search (val) {
