@@ -15,11 +15,11 @@
               <form method="post">
                 <div class="layui-form-item">
                   <label for="L_email" class="layui-form-label">用户名</label>
-                  <validation-provider rules="required|min:6" name="email" v-slot="{ errors }">
+                  <validation-provider rules="required|min:6" name="username"  v-slot="{ errors }">
                   <div class="layui-input-inline">
                     <input
                       type="email"
-                      name="email"
+                      name="username"
                       v-model="username"
                       placeholder="请输入邮箱"
                       autocomplete="off"

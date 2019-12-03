@@ -169,7 +169,7 @@ export default {
       }).catch((err) => {
         const data = err.response.data
         if (data.code === 500) {
-          this.$alert('用户名密码校验失败，请检查！')
+          this.$alert('用户名或密码校验失败，请检查！')
         } else {
           this.$alert('服务器错误')
         }
