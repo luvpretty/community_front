@@ -10,6 +10,8 @@ const Index = () =>
   import(/* webpackChunkName: 'index' */ './views/channels/Index.vue')
 const Template1 = () =>
   import(/* webpackChunkName: 'template1' */ './views/channels/Template1.vue')
+const Center = () =>
+  import(/* webpackChunkName: 'center' */ './views/Center.vue')
 Vue.use(Router)
 
 export default new Router({
@@ -53,6 +55,11 @@ export default new Router({
       path: '/forget',
       name: 'forget',
       component: Forget
+    },
+    {
+      path: '/center',
+      name: 'center',
+      component: Center
     }
   ]
 })
