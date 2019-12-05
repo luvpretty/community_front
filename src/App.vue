@@ -23,7 +23,31 @@ export default {
   position: relative;
   top: -4px;
 }
+
 .gray {
   color: #999;
+}
+
+.pl0 {
+  padding-left: 0;
+}
+.pr0 {
+  padding-right: 0;
+}
+@for $i from 0 through 5 {
+  .pd#{$i} {
+    padding: $i * 10 + 'px';
+  }
+}
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
 }
 </style>

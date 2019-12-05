@@ -39,7 +39,8 @@ export default {
         {
           name: '我的帖子',
           icon: 'layui-icon-form',
-          link: 'posts'
+          link: 'mypost',
+          activeClass: 'layui-this'
         },
         {
           name: '我的消息',

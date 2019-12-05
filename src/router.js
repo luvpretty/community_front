@@ -32,6 +32,10 @@ const Passwd = () =>
   import(/* webpackChunkName: 'password' */ './components/user/common/Passwd.vue')
 const Accounts = () =>
   import(/* webpackChunkName: 'accounts' */ './components/user/common/Accounts.vue')
+const MyPost = () =>
+  import(/* webpackChunkName: 'mypost' */ './components/user/common/MyPost.vue')
+const MyCollection = () =>
+  import(/* webpackChunkName: 'mycollection' */ './components/user/common/MyCollection.vue')
 
 Vue.use(Router)
 
@@ -123,7 +127,19 @@ export default new Router({
         {
           path: 'posts',
           name: 'posts',
-          component: Posts
+          component: Posts,
+          children: [
+            {
+              path: '',
+              name: 'mypost',
+              component: MyPost
+            },
+            {
+              path: 'mycollection',
+              name: 'mycollection',
+              component: MyCollection
+            }
+          ]
         },
         {
           path: 'msg',
