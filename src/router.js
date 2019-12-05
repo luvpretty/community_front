@@ -24,6 +24,15 @@ const Others = () =>
   import(/* webpackChunkName: 'user-others' */ './components/user/Others.vue')
 const User = () =>
   import(/* webpackChunkName: 'user' */ './views/User.vue')
+const MyInfo = () =>
+  import(/* webpackChunkName: 'info' */ './components/user/common/MyInfo.vue')
+const PicUpload = () =>
+  import(/* webpackChunkName: 'uploadpic' */ './components/user/common/PicUpload.vue')
+const Passwd = () =>
+  import(/* webpackChunkName: 'password' */ './components/user/common/Passwd.vue')
+const Accounts = () =>
+  import(/* webpackChunkName: 'accounts' */ './components/user/common/Accounts.vue')
+
 Vue.use(Router)
 
 export default new Router({
@@ -87,7 +96,29 @@ export default new Router({
         {
           path: 'set',
           name: 'set',
-          component: Settings
+          component: Settings,
+          children: [
+            {
+              path: '',
+              name: 'info',
+              component: MyInfo
+            },
+            {
+              path: 'pic',
+              name: 'pic',
+              component: PicUpload
+            },
+            {
+              path: 'passwd',
+              name: 'passwd',
+              component: Passwd
+            },
+            {
+              path: 'account',
+              name: 'account',
+              component: Accounts
+            }
+          ]
         },
         {
           path: 'posts',
