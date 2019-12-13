@@ -66,11 +66,27 @@
         </a>
         <!-- 用户头像下拉菜单 -->
         <dl class="layui-nav-child layui-anim layui-anim-upbit" :class="{'layui-show': isHover}" @mouseleave="hide()">
-          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd>
+            <router-link :to="{name: 'info'}">
+              <i class="layui-icon">&#xe620;</i>基本设置
+            </router-link>
+          </dd>
+          <dd>
+            <router-link :to="{name: 'msg'}">
+            <i class="iconfont icon-tongzhi"></i>我的消息
+            </router-link>
+          </dd>
+          <dd>
+            <router-link :to="{name: 'info'}">
+              <i class="layui-icon" style="margin-left: 2px;
+               font-size: 22px;">&#xe68e;</i>我的主页
+            </router-link>
+          </dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+          <dd>
+            <a href="javascript:void(0)"
+             style="text-align: center;" @click="logout()">退出</a>
+          </dd>
         </dl>
       </li>
       </template>
@@ -99,6 +115,15 @@ export default {
       this.hoverCtrl = setTimeout(() => {
         this.isHover = false
       }, 300)
+    },
+    logout () {
+      this.$confirm('确定退出吗?', () => {
+        localStorage.clear()
+        this.$store.commit('setToken', '')
+        this.$store.commit('setUserInfo', '')
+        this.$store.commit('setIsLogin', false)
+        this.$router.push('/')
+      }, () => { })
     }
   },
   computed: {

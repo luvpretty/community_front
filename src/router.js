@@ -40,7 +40,7 @@ const MyCollection = () =>
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   linkExactActiveClass: 'layui-this',
   routes: [
     {
@@ -91,6 +91,7 @@ export default new Router({
     {
       path: '/center',
       component: Center,
+      meta: { requiresAuth: true },
       linkActiveClass: 'layui-this',
       children: [
         {
@@ -152,27 +153,36 @@ export default new Router({
           name: 'others',
           component: Others
         }
-      ],
-      beforeEnter: (to, from, next) => {
-        const isLogin = store.state.isLogin
-        console.log(isLogin)
-        if (isLogin) {
-          // 已经登录状态
-          next()
-        } else {
-          const token = localStorage.getItem('token')
-          const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-          if (token !== '' && token !== null) {
-            store.commit('setToken', token)
-            store.commit('setUserInfo', userInfo)
-            store.commit('setIsLogin', true)
-            next()
-          } else {
-            next('/login')
-          }
-        }
-        next()
-      }
+      ]
     }
   ]
 })
+
+// 全局路由守卫
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  if (token !== '' && token !== null) {
+    store.commit('setToken', token)
+    store.commit('setUserInfo', userInfo)
+    store.commit('setIsLogin', true)
+  }
+  // 判断有无meta状态量，有则需要登录状态才能跳转，没有直接跳转
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const isLogin = store.state.isLogin
+    // 需要用户登录的页面
+    if (isLogin) {
+      // 已经登录状态
+      // 权限判断meta元数据
+      next()
+    } else {
+      // 未登录状态
+      next('/login')
+    }
+  } else {
+    // 公共页面，不需要用户登录
+    next()
+  }
+})
+
+export default router

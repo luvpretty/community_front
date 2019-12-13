@@ -20,6 +20,7 @@ export default new Vuex.Store({
     },
     // 设置用户的基本信息
     setUserInfo (state, value) {
+      if (value === '') return
       state.userInfo = value
       // 存储用户基本信息
       localStorage.setItem('userInfo', JSON.stringify(value))
