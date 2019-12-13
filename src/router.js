@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
+import store from '@/store'
 
 const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ './views/Reg.vue')
@@ -151,7 +152,27 @@ export default new Router({
           name: 'others',
           component: Others
         }
-      ]
+      ],
+      beforeEnter: (to, from, next) => {
+        const isLogin = store.state.isLogin
+        console.log(isLogin)
+        if (isLogin) {
+          // 已经登录状态
+          next()
+        } else {
+          const token = localStorage.getItem('token')
+          const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+          if (token !== '' && token !== null) {
+            store.commit('setToken', token)
+            store.commit('setUserInfo', userInfo)
+            store.commit('setIsLogin', true)
+            next()
+          } else {
+            next('/login')
+          }
+        }
+        next()
+      }
     }
   ]
 })
