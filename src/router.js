@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import store from '@/store'
+import jwt from 'jsonwebtoken'
+import moment from 'dayjs'
 
 const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ './views/Reg.vue')
@@ -101,7 +103,6 @@ const router = new Router({
         },
         {
           path: 'set',
-          name: 'set',
           component: Settings,
           children: [
             {
@@ -128,7 +129,6 @@ const router = new Router({
         },
         {
           path: 'posts',
-          name: 'posts',
           component: Posts,
           children: [
             {
@@ -163,9 +163,15 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (token !== '' && token !== null) {
-    store.commit('setToken', token)
-    store.commit('setUserInfo', userInfo)
-    store.commit('setIsLogin', true)
+    const payload = jwt.decode(token)
+    // 判断iwt有没有过期,过期则清楚本地缓存信息
+    if (moment().isBefore(moment(payload.exp * 1000))) {
+      store.commit('setToken', token)
+      store.commit('setUserInfo', userInfo)
+      store.commit('setIsLogin', true)
+    } else {
+      localStorage.clear()
+    }
   }
   // 判断有无meta状态量，有则需要登录状态才能跳转，没有直接跳转
   if (to.matched.some(record => record.meta.requiresAuth)) {
