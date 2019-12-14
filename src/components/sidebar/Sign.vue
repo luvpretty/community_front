@@ -7,7 +7,8 @@
            id="LAY_signinHelp" @click="showInfo()">说明</a>
           <i class="fly-mid"></i>
           <a href="javascript:;" class="fly-link"
-           id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>
+           id="LAY_signinTop" @click="showTop()">
+           活跃榜<span class="layui-badge-dot"></span></a>
           <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
         </div>
         <div class="fly-panel-main fly-signin-main">
@@ -78,7 +79,7 @@
               </div>
            </div>
         </div>
-           <div class="modal" v-show="ShowList">
+           <div class="modal" v-show="showList">
            <div class="mask" @click="close()"></div>
            <div class="layui-layer layui-layer-page"
             :class="{'active': ShowList}">
@@ -91,9 +92,9 @@
               <div class="layui-layer-content pd0">
                 <div class="layui-tab layui-tab-brief">
                   <ul class="layui-tab-title">
-                    <li class="layui-this">最新签到</li>
-                    <li>今日最快</li>
-                    <li>总签到榜</li>
+                    <li :class="{'layui-this': current === 0}" @click="choose(0)">最新签到</li>
+                    <li :class="{'layui-this': current === 1}" @click="choose(1)">今日最快</li>
+                    <li :class="{'layui-this': current === 2}" @click="choose(2)">总签到榜</li>
                   </ul>
                   <div class="layui-tab-content">
                     <ul class="layui-tab-item layui-show">
@@ -101,7 +102,10 @@
                       :key="'sign' + index">
                         <img src="/img/cat.jpg" alt="" class="mr1"/>
                         <cite class="fly-link">{{item.name}}</cite>
-                        <span class="fly-grey">已经连续签到 <i class="orange">
+                        <span class="fly-grey" v-if="current !== 2">
+                          签到于 {{item.created}}</span>
+                        <span class="fly-grey" v-else>
+                          已经连续签到 <i class="orange">
                           {{item.count}}</i>天</span>
                       </li>
                     </ul>
@@ -119,27 +123,33 @@ export default {
   data () {
     return {
       isShow: false,
-      ShowList: true,
+      showList: false,
+      current: 0,
       lists: [
         {
           name: 'test1',
-          count: 1
+          count: 1,
+          created: '2019-01-01'
         },
         {
           name: 'test2',
-          count: 2
+          count: 2,
+          created: '2019-01-02'
         },
         {
           name: 'test3',
-          count: 3
+          count: 3,
+          created: '2019-01-03'
         },
         {
           name: 'test4',
-          count: 4
+          count: 4,
+          created: '2019-01-04'
         },
         {
           name: 'test5',
-          count: 5
+          count: 5,
+          created: '2019-01-05'
         }
       ]
     }
@@ -148,8 +158,15 @@ export default {
     showInfo () {
       this.isShow = true
     },
+    showTop () {
+      this.showList = true
+    },
     close () {
       this.isShow = false
+      this.showList = false
+    },
+    choose (val) {
+      this.current = val
     }
   }
 }
