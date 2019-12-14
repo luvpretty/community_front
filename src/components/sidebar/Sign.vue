@@ -78,6 +78,38 @@
               </div>
            </div>
         </div>
+           <div class="modal" v-show="ShowList">
+           <div class="mask" @click="close()"></div>
+           <div class="layui-layer layui-layer-page"
+            :class="{'active': ShowList}">
+              <div class="layui-layer-title">
+                签到活跃榜 - TOP
+                <i class="layui-icon
+                 layui-icon-close
+                  pull-right" @click="close()"></i>
+                </div>
+              <div class="layui-layer-content pd0">
+                <div class="layui-tab layui-tab-brief">
+                  <ul class="layui-tab-title">
+                    <li class="layui-this">最新签到</li>
+                    <li>今日最快</li>
+                    <li>总签到榜</li>
+                  </ul>
+                  <div class="layui-tab-content">
+                    <ul class="layui-tab-item layui-show">
+                      <li v-for="(item, index) in lists"
+                      :key="'sign' + index">
+                        <img src="/img/cat.jpg" alt="" class="mr1"/>
+                        <cite class="fly-link">{{item.name}}</cite>
+                        <span class="fly-grey">已经连续签到 <i class="orange">
+                          {{item.count}}</i>天</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+           </div>
+        </div>
       </div>
 </template>
 
@@ -86,7 +118,30 @@ export default {
   name: 'sign',
   data () {
     return {
-      isShow: false
+      isShow: false,
+      ShowList: true,
+      lists: [
+        {
+          name: 'test1',
+          count: 1
+        },
+        {
+          name: 'test2',
+          count: 2
+        },
+        {
+          name: 'test3',
+          count: 3
+        },
+        {
+          name: 'test4',
+          count: 4
+        },
+        {
+          name: 'test5',
+          count: 5
+        }
+      ]
     }
   },
   methods: {
@@ -146,6 +201,24 @@ export default {
   }
   .layui-layer-content {
     padding:20px;
+  }
+  .layui-tab-content {
+    padding: 0 10px;
+  }
+  .layui-tab-item {
+    line-height: 45px;
+    li {
+      border-bottom: 1px dotted #dcdcdc;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 2px;
+      margin-right: 1px;
+    }
   }
 }
 </style>
