@@ -9,18 +9,24 @@
           <a href="javascript:;" class="fly-link"
            id="LAY_signinTop" @click="showTop()">
            活跃榜<span class="layui-badge-dot"></span></a>
-          <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
+          <span class="fly-signin-days">
+            已连续签到
+            <cite>{{count}}</cite>天
+          </span>
         </div>
         <div class="fly-panel-main fly-signin-main">
-          <button class="layui-btn layui-btn-danger"
-           id="LAY_signin">今日签到</button>
-          <span>可获得<cite>5</cite>飞吻</span>
-
+          <template v-if="!isSign">
+            <button class="layui-btn layui-btn-danger"
+             id="LAY_signin" @click="sign()">今日签到</button>
+            <span>可获得
+              <cite>{{favs}}</cite>飞吻
+            </span>
+          </template>
           <!-- 已签到状态 -->
-          <!--
-          <button class="layui-btn layui-btn-disabled">今日已签到</button>
-          <span>获得了<cite>20</cite>飞吻</span>
-          -->
+          <template v-else>
+            <button class="layui-btn layui-btn-disabled">今日已签到</button>
+            <span>获得了<cite>20</cite>飞吻</span>
+          </template>
         </div>
         <sign-info :isShow="isShow" @closeModal="close()"></sign-info>
         <sign-list :isShow="showList" @closeModal="close()"></sign-list>
@@ -30,6 +36,8 @@
 <script>
 import SignInfo from './SignInfo'
 import SignList from './SignList'
+import moment from 'dayjs'
+import { userSign } from '@/api/user'
 export default {
   name: 'sign',
   components: {
@@ -38,9 +46,55 @@ export default {
   },
   data () {
     return {
+      isLogin: this.$store.state.isLogin,
       isShow: false,
       showList: false,
-      current: 0
+      current: 0,
+      isSign: false
+    }
+  },
+  mounted () {
+    // 判断用户的上一次签到时间与签到状态
+    // 如果用户上一次签到时间与当天的签到日期相差一天，允许用户进行签到
+    const isSign = this.$store.state.userInfo.isSign
+    const lastSign = this.$store.state.userInfo.lastSign
+    const nowDate = moment().format('YYYY-MM-DD')
+    const lastDate = moment(lastSign).format('YYYY-MM-DD')
+    const diff = moment(nowDate).diff(moment(lastDate), 'day')
+    if (diff > 0 && isSign) {
+      this.isSign = false
+    } else {
+      this.isSign = isSign
+    }
+  },
+  computed: {
+    favs () {
+      let count = parseInt(this.count)
+      let result = 0
+      if (count < 5) {
+        result = 5
+      } else if (count >= 5 && count < 15) {
+        result = 10
+      } else if (count >= 15 && count < 30) {
+        result = 20
+      } else if (count >= 30 && count < 100) {
+        result = 30
+      } else if (count >= 365) {
+        result = 50
+      }
+      return result
+    },
+    // 取用户签到的天数
+    count () {
+      if (this.$store.state.userInfo !== {}) {
+        if (typeof this.$store.state.userInfo.count !== 'undefined') {
+          return this.$store.state.userInfo.count
+        } else {
+          return 0
+        }
+      } else {
+        return 0
+      }
     }
   },
   methods: {
@@ -56,6 +110,27 @@ export default {
     },
     choose (val) {
       this.current = val
+    },
+    sign () {
+      if (!this.isLogin) {
+        this.$pop('shake', '请先登录')
+        return
+      }
+      userSign().then((res) => {
+        let user = this.$store.state.userInfo
+        if (res.code === 200) {
+          user.favs = res.favs
+          user.count = res.count
+          this.$pop('', '签到成功!')
+        } else {
+          // 用户已经签到
+          this.$pop('', '您已经签到!')
+        }
+        user.isSign = true
+        user.lastSign = res.lastSign
+        this.isSign = true
+        this.$store.commit('setUserInfo', user)
+      })
     }
   }
 }
