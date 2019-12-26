@@ -14,9 +14,21 @@
                 <input type="text" id="L_username" name="username" required lay-verify="required" autocomplete="off" value="" class="layui-input">
               </div>
               <div class="layui-inline">
-                <div class="layui-input-inline">
-                  <input type="radio" name="sex" value="0" checked title="男">
-                  <input type="radio" name="sex" value="1" title="女">
+                <div class="layui-input-inline custom1">
+                  <label for="gender1" class="custom2">
+                    <input id="gender1" type="radio" name="sex"
+                    v-model="gender" value="0" title="男" />
+                    <i class="layui-icon layui-inco-circle"
+                    :class="{'layui-icon-radio': gender === '0'}"></i>
+                    男
+                  </label>
+                  <label for="gender2">
+                    <input id="gender2" type="radio" name="sex"
+                    v-model="gender" value="1" title="女" />
+                    <i class="layui-icon layui-icon-circle"
+                    :class="{'layui-icon-radio': gender === '1'}"></i>
+                    女
+                  </label>
                 </div>
               </div>
             </div>
@@ -41,10 +53,25 @@
 
 <script>
 export default {
-  name: 'myinfo'
+  name: 'myinfo',
+  data () {
+    return {
+      gender: '0'
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.custom1 {
+  margin-top: 8px;
+  color: rgb(112, 108, 108);
+}
+.custom2 {
+  margin-right: 10px;
+}
+.layui-icon-radio {
+  color: #239b45;
+}
 
 </style>
