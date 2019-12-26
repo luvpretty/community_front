@@ -39,7 +39,8 @@ const MyPost = () =>
   import(/* webpackChunkName: 'mypost' */ './components/user/common/MyPost.vue')
 const MyCollection = () =>
   import(/* webpackChunkName: 'mycollection' */ './components/user/common/MyCollection.vue')
-
+const NoFound = () =>
+  import(/* webpackChunkName: 'notfound' */ './views/NoFound.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -154,6 +155,16 @@ const router = new Router({
           component: Others
         }
       ]
+    },
+    // 404页面
+    {
+      path: '/404',
+      component: NoFound
+    },
+    // 访问不存在页面返回404页面
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 })
