@@ -2,7 +2,7 @@
   <div class="layui-form layui-form-pane layui-tab-item layui-show">
     <validation-observer ref="observer" v-slot="{ validate }">
       <div class="layui-form-item">
-        <validation-provider name="email" rules="required|email" v-slot="{ errors }">
+        <validation-provider rules="required|min:4" name="nickname" v-slot="{ errors }">
           <label for="L_email" class="layui-form-label">邮箱</label>
           <div class="layui-input-inline">
             <input type="text" name="email" class="layui-input" v-model="username" />
@@ -23,7 +23,7 @@
         <validation-provider name="nickname" rules="required|email" v-slot="{ errors }">
           <label for="L_username" class="layui-form-label">昵称</label>
           <div class="layui-input-inline">
-            <input type="text" name="nickname" class="layui-input" v-model="name" />
+            <input type="text" name="nickname" class="layui-input" v-model="nickname" />
           </div>
           <div class="layui-form-mid">
                       <span style="color: #c00;">{{errors[0]}}</span>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { updateUserInfo } from '@/api/user'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 export default {
   name: 'myinfo',
@@ -80,18 +81,38 @@ export default {
   data () {
     return {
       username: '',
-      name: '',
+      nickname: '',
       location: '',
       gender: '0',
       regmark: ''
     }
   },
+  mounted () {
+    let { username, nickname, location, gender, regmark } =
+    this.$store.state.userInfo
+    this.username = username || ''
+    this.nickname = nickname || ''
+    this.location = location || ''
+    this.gender = gender || ''
+    this.regmark = regmark || ''
+  },
   methods: {
     async submit () {
       const isValid = await this.$refs.observer.validate()
       if (!isValid) {
-
+        return
       }
+      updateUserInfo({
+        username: this.username,
+        nickname: this.nickname,
+        location: this.location,
+        gender: this.gender,
+        regmark: this.regmark
+      }).then((res) => {
+        if (res.code === 200) {
+          this.$alert('更新成功! ')
+        }
+      })
     }
   }
 }
