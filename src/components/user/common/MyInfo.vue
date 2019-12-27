@@ -2,7 +2,7 @@
   <div class="layui-form layui-form-pane layui-tab-item layui-show">
     <validation-observer ref="observer" v-slot="{ validate }">
       <div class="layui-form-item">
-        <validation-provider rules="required|min:4" name="nickname" v-slot="{ errors }">
+        <validation-provider name="email" rules="required|email" v-slot="{ errors }">
           <label for="L_email" class="layui-form-label">邮箱</label>
           <div class="layui-input-inline">
             <input type="text" name="email" class="layui-input" v-model="username" />
@@ -20,7 +20,7 @@
         </validation-provider>
       </div>
       <div class="layui-form-item">
-        <validation-provider name="nickname" rules="required|email" v-slot="{ errors }">
+        <validation-provider name="nickname" rules="required|min:4" v-slot="{ errors }">
           <label for="L_username" class="layui-form-label">昵称</label>
           <div class="layui-input-inline">
             <input type="text" name="nickname" class="layui-input" v-model="nickname" />
