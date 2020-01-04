@@ -9,6 +9,7 @@ const i18n = new VueI18n({
   messages: {
     'zh_CN': {
       fields: {
+        oldpassword: '旧密码',
         email: '邮箱',
         password: '密码',
         repass: '密码',
