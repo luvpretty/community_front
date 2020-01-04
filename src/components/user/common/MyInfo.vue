@@ -110,6 +110,17 @@ export default {
         regmark: this.regmark
       }).then((res) => {
         if (res.code === 200) {
+          // 提交到store，防止刷新页面数据丢失
+          this.$store.commit('setUserInfo', {
+            ...this.$store.state.userInfo,
+            ...{
+              username: this.username,
+              nickname: this.nickname,
+              location: this.location,
+              gender: this.gender,
+              regmark: this.regmark
+            }
+          })
           this.$alert('更新成功! ')
         }
       })
