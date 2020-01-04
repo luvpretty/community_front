@@ -18,7 +18,8 @@
 
 <script>
 import { uploadImg } from '@/api/content'
-// import { updateUserInfo } from '@/api/user'
+import config from '@/config'
+import { updateUserInfo } from '@/api/user'
 export default {
   name: 'picupload',
   data () {
@@ -43,17 +44,25 @@ export default {
       // 上传图片之后
       uploadImg(this.formData).then((res) => {
         console.log(res)
-        // updateUserInfo({ pic: this.pic }).then((res) => {
-        //   if (res.code === 200) {
-        //     // 修改全局的store内的用户基础信息
-        //     let user = this.$store.state.userInfo
-        //     user.pic = this.pic
-        //     this.$store.commit('setUserInfo', user)
-        //     this.$alert('图片上传成功')
-        //   }
-        // })
+        if (res.code === 200) {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? config.baseUrl.pro
+            : config.baseUrl.dev
+          this.pic = baseUrl + res.data
+          // 更新用户基本资料
+          updateUserInfo({ pic: this.pic }).then((res) => {
+            if (res.code === 200) {
+            // 修改全局的store内的用户基础信息
+              let user = this.$store.state.userInfo
+              user.pic = this.pic
+              this.$store.commit('setUserInfo', user)
+              this.$alert('图片上传成功')
+            }
+          })
+          // 更新完成后将信息清空
+          document.getElementById('pic').value = ''
+        }
       })
-      // 更新用户基本资料
     }
   }
 }
