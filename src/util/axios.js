@@ -21,6 +21,7 @@ class HttpRequest {
     }
     return config
   }
+  // 取消重复请求
   removePending (key) {
     if (this.pending[key]) {
       this.pending[key]('取消重复请求')
@@ -59,6 +60,7 @@ class HttpRequest {
       // Do something with response data
       let key = res.config.url + '&' + res.config.method
       this.removePending(key)
+      // 定义数据的统一处理
       if (res.status === 200) {
         return Promise.resolve(res.data)
       } else {
@@ -68,17 +70,19 @@ class HttpRequest {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       // debugger
+      // 返回错误信息
       errorHandle(err)
       return Promise.reject(err)
     })
   }
-  // 创建实例
+  // 创建axios实例
   request (options) {
     const instance = axios.create()
     const newOptions = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance)
     return instance(newOptions)
   }
+  // get方法
   get (url, config) {
     const options = Object.assign({
       method: 'get',
@@ -86,6 +90,7 @@ class HttpRequest {
     }, config)
     return this.request(options)
   }
+  // post方法
   post (url, data) {
     return this.request({
       method: 'post',
