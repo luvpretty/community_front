@@ -72,7 +72,6 @@
                       <span style="color: #c00;">{{errors[0]}}</span>
                     </div>
                   </validation-provider>
-
                 </div>
                 <div class="layui-form-item">
                   <button class="layui-btn" type="button" @click="validate().then(submit)">立即登录</button>

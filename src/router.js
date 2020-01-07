@@ -45,6 +45,8 @@ const Confirm = () =>
   import(/* webpackChunkName: 'confirm' */ './views/Confirm.vue')
 const Reset = () =>
   import(/* webpackChunkName: 'reset' */ './views/Reset.vue')
+const Add = () =>
+  import(/* webpackChunkName: 'reset' */ './components/contents/Add.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -98,6 +100,11 @@ const router = new Router({
       path: '/forget',
       name: 'forget',
       component: Forget
+    },
+    {
+      path: '/add',
+      name: 'add',
+      component: Add
     },
     {
       path: '/user/:uid',
