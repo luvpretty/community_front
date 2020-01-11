@@ -111,12 +111,14 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { getCode } from '@/api/login'
+import CodeMix from '@/mixin/code'
 import Editor from '../modules/editor/Index'
-import uuid from 'uuid/v4'
 export default {
   name: 'add',
+  mixins: [CodeMix],
+  components: {
+    Editor
+  },
   data () {
     return {
       isSelect: false,
@@ -151,20 +153,7 @@ export default {
     }
   },
   mounted () {
-    let sid = ''
-    if (localStorage.getItem('sid')) {
-      sid = localStorage.getItem('sid')
-    } else {
-      sid = uuid()
-      localStorage.setItem('sid', sid)
-    }
-    this.$store.commit('setSid', sid)
-    this._getCode()
-  },
-  components: {
-    Editor,
-    ValidationProvider,
-    ValidationObserver
+    console.log('测试取mixin中的code：', this.code)
   },
   methods: {
     chooseCatalog (item, index) {
@@ -172,14 +161,6 @@ export default {
     },
     chooseFav (item, index) {
       this.favIndex = index
-    },
-    _getCode () {
-      let sid = this.$store.state.sid
-      getCode(sid).then((res) => {
-        if (res.code === 200) {
-          this.svg = res.data
-        }
-      })
     }
   }
 }
