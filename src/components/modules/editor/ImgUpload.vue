@@ -50,7 +50,7 @@ import config from '@/config'
 import { uploadImg } from '@/api/content'
 export default {
   name: 'ImgUpload',
-  props: ['isShow', 'ctrl'],
+  props: ['isShow'],
   data () {
     return {
       pic: '',

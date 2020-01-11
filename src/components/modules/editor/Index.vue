@@ -4,28 +4,32 @@
       <div class="layui-input-block">
         <div class="layui-unselect fly-edit" ref="icons">
           <!-- 表情 -->
-          <span @click="()=> {this.faceStatus =!this.faceStatus}"
+          <span @click="choose(0)"
              ref="face" >
             <i class="layui-icon">&#xe650;</i>
           </span>
           <!-- 图片 -->
-          <span @click="()=> {this.imgStatus =!this.imgStatus}"
+          <span @click="choose(1)"
              ref="img">
             <i class="layui-icon">&#xe64a;</i>
           </span>
           <!-- 链接 -->
-          <span @click="()=> {this.linkStatus =!this.linkStatus}"
+          <span @click="choose(2)"
             ref="link">
             <i class="layui-icon">&#xe64c;</i>
           </span>
           <!-- 引用 -->
-          <span class="quote">"</span>
+          <span class="quote" @click="choose(3)">"</span>
           <!-- 代码 -->
-          <span><i class="layui-icon">&#xe64e;</i></span>
+          <span @click="choose(4)">
+            <i class="layui-icon">&#xe64e;</i>
+          </span>
           <!-- 水平线 -->
-          <span>hr</span>
+          <span @click="choose(5)">hr</span>
           <!-- 预览 -->
-          <span ><i class="layui-icon">&#xe705;</i></span>
+          <span @click="choose(6)">
+            <i class="layui-icon">&#xe705;</i>
+          </span>
         </div>
         <textarea class="layui-textarea fly-editor" name="content">
         </textarea>
@@ -34,19 +38,16 @@
 
     <div ref="modal">
       <face
-       :isShow="faceStatus"
-       :ctrl="this.$refs.face"
-       @closeEvent="()=> {this.faceStatus = false}">
+       :isShow="current === 0"
+       @closeEvent="closeModal()">
       </face>
       <img-upload
-       :isShow="imgStatus"
-       :ctrl="this.$refs.img"
-       @closeEvent="()=> {this.imgStatus = false}">
+       :isShow="current === 1"
+       @closeEvent="closeModal()">
       </img-upload>
       <link-add
-       :isShow="linkStatus"
-       :ctrl="this.$refs.link"
-       @closeEvent="()=> {this.linkStatus = false}">
+       :isShow="current === 2"
+       @closeEvent="closeModal()">
       </link-add>
     </div>
   </div>
@@ -62,16 +63,23 @@ export default {
     Face,
     ImgUpload,
     LinkAdd
-
   },
   data () {
     return {
-      faceStatus: false,
-      imgStatus: false,
-      linkStatus: false
+      current: ''
     }
   },
   methods: {
+    closeModal () {
+      this.current = ''
+    },
+    choose (index) {
+      if (index === this.current) {
+        this.closeModal()
+      } else {
+        this.current = index
+      }
+    },
     handleBodyClick (e) {
       e.stopPropagation()
       // 触发隐藏本组件的关闭事件,改变isShow
