@@ -4,12 +4,15 @@
       <div class="layui-input-block">
         <div class="layui-unselect fly-edit">
           <!-- 表情 -->
-          <span @click="()=> {this.faceStatus =!this.faceStatus}
-            " ref="face" >
+          <span @click="()=> {this.faceStatus =!this.faceStatus}"
+             ref="face" >
             <i class="layui-icon">&#xe650;</i>
           </span>
           <!-- 图片 -->
-          <span><i class="layui-icon">&#xe64a;</i></span>
+          <span @click="()=> {this.imgStatus =!this.imgStatus}"
+             ref="img">
+            <i class="layui-icon">&#xe64a;</i>
+          </span>
           <!-- 链接 -->
           <span><i class="layui-icon">&#xe64c;</i></span>
           <!-- 引用 -->
@@ -25,21 +28,32 @@
         </textarea>
       </div>
     </div>
-    <face :isShow="faceStatus" :ctrl="this.$refs.face" @closeEvent="()=> {
-      this.faceStatus = false}"></face>
+    <face
+     :isShow="faceStatus"
+     :ctrl="this.$refs.face"
+     @closeEvent="()=> {this.faceStatus = false}">
+    </face>
+    <img-upload
+     :isShow="imgStatus"
+     :ctrl="this.$refs.img"
+     @closeEvent="()=> {this.imgStatus = false}">
+    </img-upload>
   </div>
 </template>
 
 <script>
 import Face from './Face'
+import ImgUpload from './ImgUpload'
 export default {
   name: 'Editor',
   components: {
-    Face
+    Face,
+    ImgUpload
   },
   data () {
     return {
-      faceStatus: false
+      faceStatus: false,
+      imgStatus: false
     }
   }
 }
@@ -89,5 +103,10 @@ export default {
 }
 .edit-wrap {
   position: relative;
+}
+.edit-content {
+  position: absolute;
+  top: 45px;
+  left: 0;
 }
 </style>
