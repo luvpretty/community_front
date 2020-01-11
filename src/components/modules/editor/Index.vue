@@ -2,7 +2,7 @@
   <div class="edit-wrap">
     <div class="layui-form-item layui-form-text">
       <div class="layui-input-block">
-        <div class="layui-unselect fly-edit">
+        <div class="layui-unselect fly-edit" ref="icons">
           <!-- 表情 -->
           <span @click="()=> {this.faceStatus =!this.faceStatus}"
              ref="face" >
@@ -14,7 +14,10 @@
             <i class="layui-icon">&#xe64a;</i>
           </span>
           <!-- 链接 -->
-          <span><i class="layui-icon">&#xe64c;</i></span>
+          <span @click="()=> {this.linkStatus =!this.linkStatus}"
+            ref="link">
+            <i class="layui-icon">&#xe64c;</i>
+          </span>
           <!-- 引用 -->
           <span class="quote">"</span>
           <!-- 代码 -->
@@ -28,33 +31,68 @@
         </textarea>
       </div>
     </div>
-    <face
-     :isShow="faceStatus"
-     :ctrl="this.$refs.face"
-     @closeEvent="()=> {this.faceStatus = false}">
-    </face>
-    <img-upload
-     :isShow="imgStatus"
-     :ctrl="this.$refs.img"
-     @closeEvent="()=> {this.imgStatus = false}">
-    </img-upload>
+
+    <div ref="modal">
+      <face
+       :isShow="faceStatus"
+       :ctrl="this.$refs.face"
+       @closeEvent="()=> {this.faceStatus = false}">
+      </face>
+      <img-upload
+       :isShow="imgStatus"
+       :ctrl="this.$refs.img"
+       @closeEvent="()=> {this.imgStatus = false}">
+      </img-upload>
+      <link-add
+       :isShow="linkStatus"
+       :ctrl="this.$refs.link"
+       @closeEvent="()=> {this.linkStatus = false}">
+      </link-add>
+    </div>
   </div>
 </template>
 
 <script>
 import Face from './Face'
 import ImgUpload from './ImgUpload'
+import LinkAdd from './LinkAdd'
 export default {
   name: 'Editor',
   components: {
     Face,
-    ImgUpload
+    ImgUpload,
+    LinkAdd
+
   },
   data () {
     return {
       faceStatus: false,
-      imgStatus: false
+      imgStatus: false,
+      linkStatus: false
     }
+  },
+  methods: {
+    handleBodyClick (e) {
+      e.stopPropagation()
+      // 触发隐藏本组件的关闭事件,改变isShow
+      // 判断是否点击到了非控制ICON以外+本组件的地方,没有点击控制ICON才触发关闭事件
+      if (!(this.$refs.icons.contains(e.target) ||
+      this.$refs.modal.contains(e.target))) {
+        this.linkStatus = false
+        this.faceStatus = false
+        this.imgStatus = false
+      }
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      document.querySelector('body').addEventListener('click',
+        this.handleBodyClick)
+    })
+  },
+  beforeDestroy () {
+    document.querySelector('body').addEventListener('click',
+      this.handleBodyClick)
   }
 }
 </script>
