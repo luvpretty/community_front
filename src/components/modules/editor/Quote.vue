@@ -2,9 +2,9 @@
   <transition name="fade">
     <div class="layui-layer layui-layer-page
      layui-layer-prompt edit-content" v-show="isShow">
-     <div class="layui-layer-title">请输入合法链接</div>
+     <div class="layui-layer-title">请输入引用</div>
      <div class="layui-layer-content">
-       <input type="text" class="layui-layer-input" id="inputItem" v-model="link">
+       <input type="text" class="layui-layer-input" id="inputItem" v-model="quote">
      </div>
      <span class="layui-layer-setwin" @click="cancel()">
         <a href="javascript:void(0)" class="layui-layer-ico
@@ -20,29 +20,29 @@
 
 <script>
 export default {
-  name: 'LinkAdd',
+  name: 'quote',
   props: ['isShow'],
   data () {
     return {
-      link: ''
+      quote: ''
     }
   },
   methods: {
     submit () {
-      if (this.link === '') {
+      if (this.quote === '') {
         document.getElementById('inputItem').focus()
-        this.$pop('shake', '请输入合法链接')
+        this.$pop('shake', '请输入引用内容')
         return
       }
-      this.$emit('addEvent', this.link)
+      this.$emit('addEvent', this.quote)
       setTimeout(() => {
-        this.link = ''
+        this.quote = ''
         this.$emit('closeEvent')
       }, 0)
     },
     cancel () {
       this.$emit('closeEvent')
-      this.link = ''
+      this.quote = ''
     },
     handleBodyClick (e) {
       e.stopPropagation()

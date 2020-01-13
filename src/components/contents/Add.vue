@@ -5,12 +5,11 @@
     <div class="layui-form layui-form-pane">
       <div class="layui-tab layui-tab-brief" lay-filter="user">
         <ul class="layui-tab-title">
-          <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+          <li class="layui-this">发表新帖</li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
           <div class="layui-tab-item layui-show">
             <form>
-              <validation-observer ref="observer" v-slot="{ validate }">
               <div class="layui-row layui-col-space15 layui-form-item">
                 <div class="layui-col-md3">
                   <label class="layui-form-label">所在专栏</label>
@@ -22,7 +21,9 @@
                       <input type="text" placeholder="请选择"
                        readonly v-model="catalogs[cataIndex].text"
                        class="layui-input layui-unselect">
+                       <!-- 三角小图标 -->
                        <i class="layui-edge"></i>
+                       <!-- 三角小图标 -->
                     </div>
                     <dl class="layui-anim layui-anim-upbit">
                       <dd v-for="(item,index) in catalogs"
@@ -100,7 +101,6 @@
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="*" lay-submit>立即发布</button>
               </div>
-              </validation-observer>
             </form>
           </div>
         </div>

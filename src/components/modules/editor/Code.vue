@@ -2,9 +2,16 @@
   <transition name="fade">
     <div class="layui-layer layui-layer-page
      layui-layer-prompt edit-content" v-show="isShow">
-     <div class="layui-layer-title">请输入合法链接</div>
+     <div class="layui-layer-title">请贴入代码块或任意文本</div>
      <div class="layui-layer-content">
-       <input type="text" class="layui-layer-input" id="inputItem" v-model="link">
+       <textarea
+        id="inputItem"
+        type="text"
+        class="layui-layer-input"
+        v-on:keydown.enter="$event.stopPropagation()"
+        :style="{'width': this.width + 'px', 'height': this.height + 'px'}"
+        v-model="codes">
+       </textarea>
      </div>
      <span class="layui-layer-setwin" @click="cancel()">
         <a href="javascript:void(0)" class="layui-layer-ico
@@ -20,29 +27,29 @@
 
 <script>
 export default {
-  name: 'LinkAdd',
-  props: ['isShow'],
+  name: 'Code',
+  props: ['isShow', 'width', 'height'],
   data () {
     return {
-      link: ''
+      codes: ''
     }
   },
   methods: {
     submit () {
-      if (this.link === '') {
+      if (this.codes === '') {
         document.getElementById('inputItem').focus()
-        this.$pop('shake', '请输入合法链接')
+        this.$pop('shake', '请输入代码内容')
         return
       }
-      this.$emit('addEvent', this.link)
+      this.$emit('addEvent', this.codes)
       setTimeout(() => {
-        this.link = ''
+        this.codes = ''
         this.$emit('closeEvent')
       }, 0)
     },
     cancel () {
       this.$emit('closeEvent')
-      this.link = ''
+      this.codes = ''
     },
     handleBodyClick (e) {
       e.stopPropagation()

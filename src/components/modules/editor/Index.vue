@@ -25,13 +25,21 @@
             <i class="layui-icon">&#xe64e;</i>
           </span>
           <!-- 水平线 -->
-          <span @click="choose(5)">hr</span>
+          <span @click="addHr()">hr</span>
           <!-- 预览 -->
           <span @click="choose(6)">
             <i class="layui-icon">&#xe705;</i>
           </span>
         </div>
-        <textarea class="layui-textarea fly-editor" name="content">
+        <textarea
+          id="edit"
+          class="layui-textarea fly-editor"
+          name="content"
+          ref="textEdit"
+          v-model="content"
+          @focus="focusEvent()"
+          @blur="blurEvent()"
+        >
         </textarea>
       </div>
     </div>
@@ -39,39 +47,115 @@
     <div ref="modal">
       <face
        :isShow="current === 0"
-       @closeEvent="closeModal()">
+       @closeEvent="closeModal()"
+       @addEvent="addFace">
       </face>
       <img-upload
        :isShow="current === 1"
-       @closeEvent="closeModal()">
+       @closeEvent="closeModal()"
+       @addEvent="addPic">
       </img-upload>
       <link-add
        :isShow="current === 2"
-       @closeEvent="closeModal()">
+       @closeEvent="closeModal()"
+       @addEvent="addLink">
       </link-add>
+      <quote
+       :isShow="current === 3"
+       @closeEvent="closeModal()"
+       @addEvent="addQuote">
+      </quote>
+      <code-input
+       :isShow="current === 4"
+       :width="codeWidth"
+       :height="codeHeight"
+       @closeEvent="closeModal()"
+       @addEvent="addCode">
+      </code-input>
     </div>
   </div>
 </template>
 
 <script>
+import CodeInput from './Code'
+import Quote from './Quote'
 import Face from './Face'
 import ImgUpload from './ImgUpload'
 import LinkAdd from './LinkAdd'
 export default {
   name: 'Editor',
   components: {
+    CodeInput,
+    Quote,
     Face,
     ImgUpload,
     LinkAdd
   },
   data () {
     return {
-      current: ''
+      current: '',
+      codeWidth: 400,
+      codeHeight: 200,
+      content: '',
+      pos: ''
     }
   },
   methods: {
     closeModal () {
       this.current = ''
+    },
+    focusEvent () {
+      this.getPos()
+    },
+    blurEvent () {
+      this.getPos()
+    },
+    // 计算光标当前位置
+    getPos () {
+      let cursorPos = 0
+      let elem = document.getElementById('edit')
+      if (document.selection) {
+        // IE
+        let selectRang = document.selection.createRange()
+        selectRang.moveStart('character', -elem.value.length)
+        cursorPos = selectRang.text.length
+      } else if (elem.selectionStart || elem.selectionStart === '0') {
+        cursorPos = elem.selectionStart
+      }
+      this.pos = cursorPos
+    },
+    addFace (item) {
+      const insertContent = ` face${item}`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    // 添加图片
+    addPic (item) {
+      const insertContent = ` img[${item}]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    // 添加链接
+    addLink (item) {
+      const insertContent = ` a(${item})[${item}]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    // 添加代码
+    addCode (item) {
+      const insertContent = ` \n[pre]\n${item}\n[/pre]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    // 添加链接
+    addQuote (item) {
+      const insertContent = ` \n[quote]\n${item}\n[/quote]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    addHr () {
+      this.insert('\n[hr]')
+      this.pos += 5
     },
     choose (index) {
       if (index === this.current) {
@@ -86,16 +170,29 @@ export default {
       // 判断是否点击到了非控制ICON以外+本组件的地方,没有点击控制ICON才触发关闭事件
       if (!(this.$refs.icons.contains(e.target) ||
       this.$refs.modal.contains(e.target))) {
-        this.linkStatus = false
-        this.faceStatus = false
-        this.imgStatus = false
+        this.closeModal()
       }
+    },
+    insert (val) {
+      if (typeof this.content === 'undefined') {
+        return
+      }
+      let tmp = this.content.split('')
+      tmp.splice(this.pos, 0, val)
+      this.content = tmp.join('')
     }
   },
   mounted () {
     this.$nextTick(() => {
       document.querySelector('body').addEventListener('click',
         this.handleBodyClick)
+    })
+    console.log(this.$refs.textEdit)
+    this.codeWidth = this.$refs.textEdit.offsetWidth - 60
+    this.codeHeight = this.$refs.textEdit.offsetHeight - 80
+    window.addEventListener('resize', () => {
+      this.codeWidth = this.$refs.textEdit.offsetWidth - 80
+      this.codeHeight = this.$refs.textEdit.offsetHeight - 80
     })
   },
   beforeDestroy () {
