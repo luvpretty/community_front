@@ -27,7 +27,7 @@
           <!-- 水平线 -->
           <span @click="addHr()">hr</span>
           <!-- 预览 -->
-          <span @click="choose(6)">
+          <span @click="choose(5)">
             <i class="layui-icon">&#xe705;</i>
           </span>
         </div>
@@ -72,6 +72,13 @@
        @closeEvent="closeModal()"
        @addEvent="addCode">
       </code-input>
+      <Preview
+      :isShow="current === 5"
+      @closeEvent="closeModal()"
+      :content="content"
+      >
+
+      </Preview>
     </div>
   </div>
 </template>
@@ -82,6 +89,7 @@ import Quote from './Quote'
 import Face from './Face'
 import ImgUpload from './ImgUpload'
 import LinkAdd from './LinkAdd'
+import Preview from './Preview'
 export default {
   name: 'Editor',
   components: {
@@ -89,7 +97,8 @@ export default {
     Quote,
     Face,
     ImgUpload,
-    LinkAdd
+    LinkAdd,
+    Preview
   },
   data () {
     return {

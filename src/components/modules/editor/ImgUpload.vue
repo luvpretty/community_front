@@ -24,7 +24,7 @@
                 name="file"
                 id="uploadImg"
                 class="layui-upload-file"
-                @change="upload">
+                @change="upload" />
             </button>
           </li>
           <li class="layui-form-item">
@@ -67,6 +67,7 @@ export default {
     upload (e) {
       let file = e.target.files
       let formData = new FormData()
+      console.log('formData', formData)
       if (file.length > 0) {
         formData.append('file', file[0])
         this.formData = formData
