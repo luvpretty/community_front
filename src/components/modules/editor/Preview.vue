@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
        id="preview"
-       class="layui-layer layui-layer-page layui-layer-prompt
+       class="layui-layer-page layui-layer-prompt
        edit-content"
        v-show="isShow">
      <div class="layui-layer-title">预览</div>

@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="layui-layer layui-layer-tips
+    <div class="layui-layer-tips
      layui-edit-face edit-content" v-show="isShow">
       <div class="layui-layer-content">
         <ul class="layui-clear">
