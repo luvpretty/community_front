@@ -10,48 +10,66 @@
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
           <div class="layui-tab-item layui-show">
             <form>
+              <validation-observer ref="observer" v-slot="{ validate }">
               <div class="layui-row layui-col-space15 layui-form-item">
                 <div class="layui-col-md3">
-                  <label class="layui-form-label">所在专栏</label>
-                  <div class="layui-input-block"
-                   @click="() => {this.isSelect = !this.isSelect}">
-                    <div class="layui-unselect layui-form-select"
-                    :class="{'layui-form-selected': isSelect}">
-                    <div class="layui-select-title">
-                      <input type="text" placeholder="请选择"
-                       readonly v-model="catalogs[cataIndex].text"
-                       class="layui-input layui-unselect">
-                       <!-- 三角小图标 -->
-                       <i class="layui-edge"></i>
-                       <!-- 三角小图标 -->
-                    </div>
-                    <dl class="layui-anim layui-anim-upbit">
-                      <dd v-for="(item,index) in catalogs"
-                       @click="chooseCatalog(item, index)"
-                       :key="'catalog' + index"
-                       :class="{'layui-this': index === cataIndex}">
-                        {{item.text}}
-                      </dd>
-                    </dl>
-                    </div>
+                  <validation-provider name="catalog" rules="is_not:请选择" v-slot="{ errors }">
+                  <div class="layui-row">
+                      <label class="layui-form-label">所在专栏</label>
+                          <div class="layui-input-block"
+                           @click="changeSelect">
+                            <div class="layui-unselect layui-form-select"
+                            :class="{'layui-form-selected': isSelect}">
+                            <div class="layui-select-title">
+                              <input type="text" placeholder="请选择"
+                               readonly v-model="catalogs[cataIndex].text"
+                               class="layui-input layui-unselect">
+                               <!-- 三角小图标 -->
+                               <i class="layui-edge"></i>
+                               <!-- 三角小图标 -->
+                            </div>
+                            <dl class="layui-anim layui-anim-upbit">
+                              <dd v-for="(item,index) in catalogs"
+                               @click="chooseCatalog(item, index)"
+                               :key="'catalog' + index"
+                               :class="{'layui-this': index === cataIndex}">
+                                {{item.text}}
+                              </dd>
+                            </dl>
+                            </div>
+                          </div>
                   </div>
+                  <div class="layui-row">
+                    <span style="color: #c00;">{{errors[0]}}</span>
+                  </div>
+                  </validation-provider>
                 </div>
                 <div class="layui-col-md9">
-                  <label for="L_title" class="layui-form-label">标题</label>
-                  <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
-                  </div>
+                  <validation-provider name="title" rules="required" v-slot="{ errors }">
+                      <div class="layui-row">
+                          <label for="L_title" class="layui-form-label">标题</label>
+                          <div class="layui-input-block">
+                            <input
+                            type="text"
+                            class="layui-input"
+                            v-model="title" />
+                            <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                          </div>
+                      </div>
+                      <div class="layui-row">
+                          <span style="color: #c00;">{{errors[0]}}</span>
+                      </div>
+                  </validation-provider>
                 </div>
               </div>
-              <editor></editor>
+              <editor @changeContent="add"></editor>
               <div class="layui-form-item">
                 <div class="layui-inline">
                   <label class="layui-form-label">悬赏飞吻</label>
                   <div class="layui-input-inline" style="width: 190px;">
                       <div class="layui-unselect layui-form-select"
                         :class="{'layui-form-selected': isSelect_fav}"
-                        @click="() => {this.isSelect_fav = !this.isSelect_fav}">
+                        @click="changeFav">
                         <div class="layui-select-title">
                           <input
                             type="text"
@@ -99,8 +117,13 @@
                   </validation-provider>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-filter="*" lay-submit>立即发布</button>
+                <button type="button"
+                class="layui-btn"
+                @click="validate().then(submit)"
+                >立即发布
+                </button>
               </div>
+              </validation-observer>
             </form>
           </div>
         </div>
@@ -111,6 +134,7 @@
 </template>
 
 <script>
+import { addPost } from '@/api/content'
 import CodeMix from '@/mixin/code'
 import Editor from '../modules/editor/Index'
 export default {
@@ -148,12 +172,12 @@ export default {
         }
       ],
       favList: [20, 30, 50, 60, 80],
-      code: '',
-      svg: ''
+      content: '',
+      title: ''
     }
   },
   mounted () {
-    console.log('测试取mixin中的code：', this.code)
+
   },
   methods: {
     chooseCatalog (item, index) {
@@ -161,6 +185,37 @@ export default {
     },
     chooseFav (item, index) {
       this.favIndex = index
+    },
+    changeSelect () {
+      this.isSelect = !this.isSelect
+    },
+    changeFav () {
+      this.isSelect_fav = !this.isSelect_fav
+    },
+    add (val) {
+      this.content = val
+    },
+    async submit () {
+      const isValid = await this.$refs.observer.validate()
+      if (!isValid) {
+        return
+      }
+
+      if (this.content.trim() === '') {
+        this.$alert('文章内容不得为空!')
+        return
+      }
+      // 添加新的文章
+      addPost({
+        title: this.title,
+        catalog: this.catalogs[this.cataIndex].value,
+        content: this.content,
+        fav: this.favList[this.favIndex],
+        code: this.code,
+        sid: this.$store.state.sid
+      }).then((res) => {
+
+      })
     }
   }
 }

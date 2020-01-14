@@ -109,6 +109,10 @@ export default {
       pos: ''
     }
   },
+  updated () {
+    this.$emit('changeContent', this.content)
+    console.log('content' + this.content)
+  },
   methods: {
     closeModal () {
       this.current = ''
@@ -162,6 +166,7 @@ export default {
       this.insert(insertContent)
       this.pos += insertContent.length
     },
+    // 添加分割线
     addHr () {
       this.insert('\n[hr]')
       this.pos += 5

@@ -17,13 +17,16 @@ const i18n = new VueI18n({
         username: '账号',
         code: '验证码',
         vercode: '验证码',
-        nickname: '昵称'
+        nickname: '昵称',
+        title: '标题',
+        catalog: '分类'
       },
       validation: {
         ...zh.messages,
         required: '请输入{_field_}',
         email: '请输入正确的{_field_}!!!',
-        is: '两次输入{_field_}不一致!!!'
+        is: '两次输入{_field_}不一致!!!',
+        is_not: '请选择{_field_}'
       }
     }
   }
