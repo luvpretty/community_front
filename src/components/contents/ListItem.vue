@@ -26,7 +26,7 @@
                 <i class="iconfont icon-pinglun1" title="回答"></i> {{item.answer}}
               </span>
             </div>
-            <div class="fly-list-badge" v-show="item.tags.length > 0">
+            <div class="fly-list-badge" v-show="item.tags.length > 0 && item.tags[0].name !== ''">
               <span class="layui-badge"
               v-for="(tag, index) in item.tags"
               :key="'tag' + index" :class="tag.class">{{tag.name}}</span>
@@ -44,8 +44,12 @@
 
 <script>
 import _ from 'lodash'
-import moment from 'moment'
-import 'moment/locale/zh-cn'
+import moment from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+
+moment.extend(relativeTime)
+
 export default {
   name: 'listitem',
   props: {
@@ -100,7 +104,7 @@ export default {
       if (moment(date).isBefore(moment().subtract(7, 'days'))) {
         return moment(date).format('YYYY-MM-DD')
       } else {
-        return moment(date).from(moment())
+        return moment(date).locale('zh-cn').from(moment())
       }
     }
   }
