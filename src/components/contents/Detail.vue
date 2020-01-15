@@ -144,7 +144,7 @@
           <!-- 无数据时 -->
           <!-- <li class="fly-none">消灭零回复</li> -->
         </ul>
-
+        <Pagination></Pagination>
         <div class="layui-form layui-form-pane">
           <form action="/jie/reply/" method="post">
             <Editor></Editor>
@@ -182,7 +182,6 @@
       <HotList></HotList>
       <Ads></Ads>
       <Links></Links>
-
     </div>
   </div>
 </div>
@@ -195,7 +194,7 @@ import Links from '@/components/sidebar/Links'
 import Panel from '@/components/Panel'
 import Editor from '../modules/editor/Index'
 import CodeMix from '@/mixin/code'
-
+import Pagination from '@/components/modules/page/Index'
 export default {
   name: 'Detail',
   mixins: [CodeMix],
@@ -204,7 +203,8 @@ export default {
     Ads,
     Links,
     Panel,
-    Editor
+    Editor,
+    Pagination
 
   }
 }
