@@ -1,6 +1,6 @@
 <template>
-<div :class="{'text-center': align === 'center'
-,'text-left': align === 'left', 'text-right': align === 'right'}">
+<div class="d-flex" :class="{'flex-center': align === 'center'
+,'flex-start': align === 'left', 'flex-end': align === 'right'}">
 <div class="layui-box layui-laypage layui-laypage-default">
  <a href="javascript:;" class="layui-laypage-prev
   layui-disabled" data-page="0" v-show="showEnd">
@@ -25,6 +25,33 @@
    <template v-else>尾页</template>
  </a>
  </div>
+ <div class="total" v-if="hasTotal">
+   到第<input type="text" class="imooc-input">页 共 total 页
+ </div>
+ <div v-if="hasSelect">
+   <div class="layui-unselect layui-form-select"
+    :class="{'layui-form-selected': isSelect}"
+    @click="changeFav">
+    <div class="layui-select-title">
+      <input
+        type="text"
+        placeholder="请选择"
+        readonly
+        v-model="options[optIndex]"
+        class="layui-input layui-unselect"
+      >
+        <i class="layui-edge"></i>
+    </div>
+    <dl class="layui-anim layui-anim-upbit">
+        <dd v-for="(item,index) in options"
+         @click="chooseFav(item, index)"
+         :key="'catalog' + index"
+         :class="{'layui-this': index === optIndex}">
+          {{item}}
+        </dd>
+    </dl>
+</div>
+ </div>
 </div>
 
 </template>
@@ -38,7 +65,7 @@ export default {
     },
     showType: {
       type: String,
-      default: 'text'
+      default: 'icon'
     },
     showEnd: {
       type: Boolean,
@@ -47,6 +74,29 @@ export default {
     theme: {
       type: String,
       default: 'layui-bg-green'
+    },
+    hasTotal: {
+      type: Boolean,
+      default: false
+    },
+    hasSelect: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      isSelect: false,
+      optIndex: 0,
+      options: [10, 20, 30, 50, 100]
+    }
+  },
+  methods: {
+    chooseFav (item, index) {
+      this.optIndex = index
+    },
+    changeFav () {
+      this.isSelect = !this.isSelect
     }
   }
 }
@@ -62,8 +112,33 @@ export default {
       z-index: 100;
     }
   }
-  .layui-bg-green {
+.layui-bg-green {
     border-color: #009688;
   }
+}
+.total {
+    color: rgba(51, 51, 51, 1);
+    margin-left: 10px;
+    position: relative;
+    top: -2px;
+  }
+
+.imooc-input {
+    width: 30px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 28px;
+}
+
+.layui-input {
+  height: 30px;
+  line-height: 30px;
+}
+
+.layui-form-select {
+  width: 80px;
+  position: relative;
+  top: -2.5px;
+  margin-left: 10px;
 }
 </style>

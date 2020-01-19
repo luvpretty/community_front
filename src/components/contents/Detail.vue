@@ -144,7 +144,7 @@
           <!-- 无数据时 -->
           <!-- <li class="fly-none">消灭零回复</li> -->
         </ul>
-        <Pagination></Pagination>
+        <Pagination :showType="icon" :hasSelect="true"></Pagination>
         <div class="layui-form layui-form-pane">
           <form action="/jie/reply/" method="post">
             <Editor></Editor>

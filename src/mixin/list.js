@@ -1,3 +1,4 @@
+// 获取帖子信息
 import { getList } from '@/api/content'
 
 export default {

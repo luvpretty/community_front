@@ -1,3 +1,4 @@
+// 获取验证码
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { getCode } from '@/api/login'
 import uuid from 'uuid/v4'

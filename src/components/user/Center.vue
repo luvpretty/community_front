@@ -1,13 +1,13 @@
 <template>
   <div class="panel main pd20">
-    <div class="msg">Hi, Admin, 您已经是我们的正式会员</div>
+    <div class="msg">Hi, {{this.nickname}}, 欢迎您</div>
     <div class="layui-row layui-col-space20">
       <div class="layui-col-md6">
         <div class="panel border">
           <div class="title">我的会员信息</div>
           <div class="content">
-            <p>积分经验值：60</p>
-            <p>您当前为: 非VIP</p>
+            <p>积分经验值：{{this.favs}}</p>
+            <p>您当前为: {{this.isVip}} </p>
           </div>
         </div>
       </div>
@@ -20,10 +20,10 @@
           <div class="content" style="height: auto;">
             <ul class="layui-row layui-col-space10">
               <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
+                <router-link :to="{'name': 'index'}">
                   <div class="layui-icon layui-icon-set shortcut"></div>
                   <span>修改密码</span>
-                </a>
+                </router-link>
               </li>
               <li class="layui-col-sm3 layui-col-xs4">
                 <a href="">
@@ -109,6 +109,13 @@ export default {
   name: 'user-center',
   components: {
     Sign
+  },
+  data () {
+    return {
+      nickname: this.$store.state.userInfo.nickname,
+      favs: this.$store.state.userInfo.favs,
+      isVip: this.$store.state.userInfo.isVip === '0' ? '非VIP' : 'VIP'
+    }
   }
 }
 </script>
