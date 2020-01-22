@@ -149,7 +149,8 @@
          :hasSelect="true"
          :total="101"
          :size="15"
-         :current="2">
+         :current="6"
+         :showEnd="true">
         </Pagination>
         <div class="layui-form layui-form-pane">
           <form action="/jie/reply/" method="post">

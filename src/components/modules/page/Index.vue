@@ -2,25 +2,40 @@
 <div class="d-flex" :class="{'flex-center': align === 'center'
 ,'flex-start': align === 'left', 'flex-end': align === 'right'}">
 <div class="layui-box layui-laypage layui-laypage-default">
- <a href="javascript:;" class="layui-laypage-prev
-  layui-disabled" data-page="0" v-show="showEnd">
+ <a href="javascript:;" class="layui-laypage-prev"
+ v-show="showEnd" :class="{'layui-disabled': current === 0}">
    <i class="layui-icon layui-icon-prev" v-if="showType === 'icon'"></i>
    <template v-else>首页</template>
  </a>
- <a href="javascript:;" data-page="2">
+ <a href="javascript:;" :class="{'layui-disabled': current === 0}">
    <i class="layui-icon layui-icon-left" v-if="showType === 'icon'"></i>
    <template v-else>上一页</template>
  </a>
- <a href="javascript:;" :class="[true ? theme: '', true ? 'active': '']">1</a>
- <a href="javascript:;">2</a>
- <a href="javascript:;">3</a>
- <a href="javascript:;">4</a>
- <a href="javascript:;">5</a>
- <a href="javascript:;">
+ <!-- current + 2 < pages.length 显示 ... -->
+ <!-- current -2  > 1 显示 ... -->
+ <a v-if="pages.length > 5 && (current + 1 - 2) > 1"
+    href="javascript:;"
+    :key="'page' + index"
+ >...</a>
+ <template v-for="(item, index) in pages">
+    <a v-if="item>=(current + 1 - 2) && item <=(current + 1 + 2)"
+    href="javascript:;"
+    :key="'page' + index"
+    :class="[current === index ? theme: '',current === index ? 'active': '']"
+    >{{item}}</a>
+ </template>
+ <a v-if="pages.length > 5 && (current + 1 + 2) < pages.length"
+    href="javascript:;"
+    :key="'page' + index"
+    :class="[current === index ? theme: '',current === index ? 'active': '']"
+ >...</a>
+
+ <a href="javascript:;" :class="{'layui-disabled': current === pages.length - 1}">
    <i class="layui-icon layui-icon-right" v-if="showType === 'icon'"></i>
    <template v-else>下一页</template>
  </a>
- <a href="javascript:;" class="layui-laypage-next" data-page="2" v-show="showEnd">
+ <a href="javascript:;" class="layui-laypage-next" v-show="showEnd"
+ :class="{'layui-disabled': current === pages.length - 1}">
    <i class="layui-icon layui-icon-next" v-if="showType === 'icon'"></i>
    <template v-else>尾页</template>
  </a>
