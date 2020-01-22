@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
   props: {
     align: {
@@ -82,16 +83,48 @@ export default {
     hasSelect: {
       type: Boolean,
       default: false
+    },
+    // 总页数
+    total: {
+      type: Number,
+      default: 0
+    },
+    // 当前页数
+    current: {
+      type: Number,
+      default: 0
+    },
+    // 与options重叠,
+    size: {
+      type: Number,
+      default: 10
     }
   },
   data () {
     return {
       isSelect: false,
       optIndex: 0,
-      options: [10, 20, 30, 50, 100]
+      options: [10, 20, 30, 50, 100],
+      pages: [],
+      limit: 10
     }
   },
+  mounted () {
+    // 初始化分页的长度
+    this.initPages()
+    // 设置下拉选择分页框的内容
+    this.limit = this.size
+    // 将分页数推入options
+    this.options = _.uniq(_.sortBy(_.concat(this.options, this.size)))
+    // 取得size在数组中的位置
+    this.optIndex = this.options.indexOf(this.size)
+  },
   methods: {
+    initPages () {
+      const len = Math.ceil(this.total / this.size)
+      // 5 -> [1,2,3,4,5]
+      this.pages = _.range(1, len + 1)
+    },
     chooseFav (item, index) {
       this.optIndex = index
     },
