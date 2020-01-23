@@ -147,10 +147,11 @@
         <Pagination
          :showType="'icon'"
          :hasSelect="true"
-         :total="101"
-         :size="15"
-         :current="6"
-         :showEnd="true">
+         :total="total"
+         :size="size"
+         :current="current"
+         :showEnd="true"
+         @changCurrent="handleChange">
         </Pagination>
         <div class="layui-form layui-form-pane">
           <form action="/jie/reply/" method="post">
@@ -212,7 +213,18 @@ export default {
     Panel,
     Editor,
     Pagination
-
+  },
+  data () {
+    return {
+      total: 115,
+      size: 10,
+      current: 10
+    }
+  },
+  methods: {
+    handleChange (val) {
+      this.current = val
+    }
   }
 }
 </script>
