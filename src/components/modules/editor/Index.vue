@@ -92,6 +92,7 @@ import LinkAdd from './LinkAdd'
 import Preview from './Preview'
 export default {
   name: 'Editor',
+  props: ['initContent'],
   components: {
     CodeInput,
     Quote,
@@ -107,6 +108,11 @@ export default {
       codeHeight: 200,
       content: '',
       pos: ''
+    }
+  },
+  watch: {
+    initContent (newval, oldval) {
+      this.content = newval
     }
   },
   updated () {

@@ -162,11 +162,12 @@ export default {
           this.$store.commit('setUserInfo', res.data)
           this.$store.commit('setIsLogin', true)
           this.$store.commit('setToken', res.token)
+          // 清空表单
           this.username = ''
           this.password = ''
           this.code = ''
           requestAnimationFrame(() => {
-            this.$refs.observer.reset()
+            this.$refs.observer && this.$refs.observer.reset()
           })
           this.$router.push({ name: 'index' })
         } else if (res.code === 401) {

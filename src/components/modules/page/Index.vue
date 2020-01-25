@@ -126,6 +126,11 @@ export default {
       limit: 10
     }
   },
+  watch: {
+    total (newval, oldval) {
+      this.initPages()
+    }
+  },
   mounted () {
     // 设置下拉选择分页框的内容
     this.limit = this.size
@@ -147,6 +152,7 @@ export default {
         // 当页面上的limit发生变化之后,调整current数值
         this.$emit('changCurrent', Math.floor(this.limit *
         this.current / this.options[index]))
+        this.$emit('changeLimit', this.options[index])
       }
       this.optIndex = index
       this.limit = this.options[this.optIndex]
@@ -180,7 +186,9 @@ export default {
       this.$emit('changCurrent', cur)
     },
     changeIndex (val) {
-      this.$emit('changCurrent', val)
+      if (val !== this.current) {
+        this.$emit('changCurrent', val)
+      }
     }
   }
 }
