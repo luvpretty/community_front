@@ -15,9 +15,18 @@ const changePasswd = (data) => axios.post('/user/change-password', {
   ...data
 })
 
+// 设置收藏 & 取消收藏
+const addCollect = (data) => axios.get('/user/set-collect?' +
+qs.stringify(data))
+
+// 获取收藏列表
+const getCollect = (data) => axios.get('/user/collect?' +
+qs.stringify(data))
 export {
   userSign,
   updateUserInfo,
   updateUsername,
-  changePasswd
+  changePasswd,
+  addCollect,
+  getCollect
 }

@@ -40,7 +40,7 @@
 
           <span class="layui-badge"
           style="background-color: #999;"
-          v-else-if="page.isEnd === '0'">未结</span>
+          v-if="page.isEnd === '0'">未结</span>
           <span class="layui-badge"
           style="background-color: #5FB878;"
           v-else>已结</span>
@@ -88,8 +88,13 @@
           </div>
         </div>
         <div class="layui-btn-container fly-detail-admin pt1">
-          <a href="" class="layui-btn layui-btn-sm jie-admin">编辑</a>
-          <a href="" class="layui-btn layui-btn-sm jie-admin jie-admin-collect">收藏</a>
+          <router-link class="layui-btn layui-btn-sm jie-admin"
+          :to="{name: 'edit', params: {tid: tid, page: page}}"
+          v-show="page.isEnd === '0'">编辑</router-link>
+          <a href=""
+          class="layui-btn layui-btn-sm jie-admin jie-admin-collect"
+          :class="{'layui-btn-primary': page.isFav}"
+          @click.prevent="setCollect()">{{page.isFav ? '取消收藏': '收藏'}}</a>
         </div>
         <div class="detail-body photos" v-html="content"></div>
       </div>
@@ -157,9 +162,12 @@
           <!-- 无数据时 -->
           <li class="fly-none" v-if="comments.length === 0">消灭零回复</li>
         </ul>
+        <!-- 分页导航栏 -->
         <Pagination
+         v-show="comments.length > 0 && total > 0"
          :showType="'icon'"
-         :hasSelect="true"
+         :hasSelect="false"
+         :hasTotal="false"
          :total="total"
          :size="size"
          :current="current"
@@ -216,6 +224,7 @@
 <script>
 import { getDetail } from '@/api/content'
 import { getComments, addComment, updateComment, setCommentBest, setHands } from '@/api/comments'
+import { addCollect } from '@/api/user'
 import HotList from '@/components/sidebar/HotList'
 import Ads from '@/components/sidebar/Ads'
 import Links from '@/components/sidebar/Links'
@@ -422,6 +431,25 @@ export default {
       }
       scrollToElem('.layui-input-block', 500, -75)
       document.getElementById('edit').focus()
+    },
+    setCollect () {
+      // 设置收藏 & 取消收藏
+      const isLogin = this.$store.state.isLogin
+      if (isLogin) {
+        const collect = {
+          tid: this.tid,
+          title: this.page.title,
+          isFav: this.page.isFav ? 1 : 0
+        }
+        addCollect(collect).then((res) => {
+          if (res.code === 200) {
+            this.page.isFav = !this.page.isFav
+            this.$pop('', this.page.isFav ? '设置收藏成功' : '取消收藏成功')
+          }
+        })
+      } else {
+        this.$pop('shake', '请先登录后再进行收藏!')
+      }
     }
   },
   computed: {
