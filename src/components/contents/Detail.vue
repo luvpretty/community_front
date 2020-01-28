@@ -74,7 +74,8 @@
             <img :src="page.uid?page.uid.pic: '/img/cat.jpg'">
           </a>
           <div class="fly-detail-user">
-            <a href="../user/home.html" class="fly-link">
+            <a class="fly-link"
+            >
               <cite>{{page.uid?page.uid.nickname: '新手小白'}}</cite>
               <!-- <i class="iconfont icon-renzheng" title="认证信息"></i> -->
               <i class="layui-badge fly-badge-vip mr1"
@@ -112,13 +113,13 @@
                 <img :src="item.cuid ? item.cuid.pic : '/img/cat.jpg'" alt=" ">
               </a>
               <div class="fly-detail-user">
-                <a href="" class="fly-link">
+                <router-link class="fly-link" :to="{name: 'home', params: {uid: item.cuid._id}}">
                   <cite>{{item.cuid?item.cuid.nickname : '新手小白'}}</cite>
                   <i class="layui-badge fly-badge-vip"
                   v-if="item.cuid && item.cuid.isVip !== '0'
                   ?item.cuid.isVip : false">
                     VIP{{item.cuid.isVip}}</i>
-                </a>
+                </router-link>
 
                 <span v-if="index === 0">(楼主)</span>
                 <!--

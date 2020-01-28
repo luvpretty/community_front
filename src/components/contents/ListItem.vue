@@ -10,14 +10,14 @@
           <router-link :to="{name: 'detail', params: {tid: item._id}}">{{item.title}}</router-link>
         </h2>
         <div class="fly-list-info">
-          <a href="user/home.html" link>
+          <router-link :to="{name: 'home', params: {uid: item.uid._id}}" link>
             <cite>{{item.uid.nickname}}</cite>
             <!--<i class="iconfont icon-renzheng" title="认证信息：XXX"></i>-->
             <i
               class="layui-badge fly-badge-vip"
               v-if="item.uid.isVip !== '0'"
             >{{'VIP' + item.uid.isVip}}</i>
-          </a>
+          </router-link>
           <span>{{item.created | moment}}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">

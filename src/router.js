@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home'
+import Home from '@/views/Home.vue'
 import store from '@/store'
-import jwt from 'jsonwebtoken'
+// import jwt from 'jsonwebtoken'
 import moment from 'dayjs'
 
 const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue')
@@ -24,9 +24,9 @@ const Posts = () =>
 const Msg = () =>
   import(/* webpackChunkName: 'user-msg' */ './components/user/Msg.vue')
 const Others = () =>
-  import(/* webpackChunkName: 'user-others' */ './components/user/Others.vue')
+  import(/* webpackChunkName: 'othres' */ './components/user/Others.vue')
 const User = () =>
-  import(/* webpackChunkName: 'user' */ './views/User.vue')
+  import(/* webpackChunkName: 'home' */ './views/User.vue')
 const MyInfo = () =>
   import(/* webpackChunkName: 'info' */ './components/user/common/MyInfo.vue')
 const PicUpload = () =>
@@ -40,7 +40,7 @@ const MyPost = () =>
 const MyCollection = () =>
   import(/* webpackChunkName: 'mycollection' */ './components/user/common/MyCollection.vue')
 const NoFound = () =>
-  import(/* webpackChunkName: 'notfound' */ './views/NoFound.vue')
+  import(/* webpackChunkName: 'notfound' */ './views/NotFound.vue')
 const Confirm = () =>
   import(/* webpackChunkName: 'confirm' */ './views/Confirm.vue')
 const Reset = () =>
@@ -51,6 +51,7 @@ const Edit = () =>
   import(/* webpackChunkName: 'edit' */ './components/contents/Edit.vue')
 const Detail = () =>
   import(/* webpackChunkName: 'detail' */ './components/contents/Detail.vue')
+
 Vue.use(Router)
 
 const router = new Router({
@@ -91,7 +92,6 @@ const router = new Router({
       path: '/reg',
       name: 'reg',
       component: Reg,
-      // 禁止用户直接访问注册页面
       beforeEnter: (to, from, next) => {
         if (from.name === 'login') {
           next()
@@ -118,13 +118,12 @@ const router = new Router({
       component: Edit,
       meta: { requiresAuth: true },
       beforeEnter (to, from, next) {
-        // 正常情况，来自detail组件且未结贴
-        if (from.name === 'detail' && to.params.page &&
-        to.params.page.isEnd === '0') {
+        // 正常的情况 detail
+        if (['detail', 'mypost'].indexOf(from.name) !== -1 && to.params.page && to.params.page.isEnd === '0') {
           next()
         } else {
           // 用户在edit页面刷新的情况
-          const editData = localStorage.getItem('aditData')
+          const editData = localStorage.getItem('editData')
           if (editData && editData !== '') {
             const editObj = JSON.parse(editData)
             if (editObj.isEnd === '0') {
@@ -215,12 +214,11 @@ const router = new Router({
         }
       ]
     },
-    // 404页面
     {
       path: '/404',
+      name: '404',
       component: NoFound
     },
-    // 访问不存在页面返回404页面
     {
       path: '*',
       redirect: '/404'
@@ -228,14 +226,17 @@ const router = new Router({
   ]
 })
 
-// 全局路由守卫
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (token !== '' && token !== null) {
-    const payload = jwt.decode(token)
-    // 判断iwt有没有过期,过期则清楚本地缓存信息
+    // method 1
+    // const payload = jwt.decode(token)
+    // method 2
+    const payload = JSON.parse(atob(token.split('.')[1]))
     if (moment().isBefore(moment(payload.exp * 1000))) {
+      // 取localStorage里面缓存的token信息 + 用户信息
+      // 8-24小时， refresh token 1个月
       store.commit('setToken', token)
       store.commit('setUserInfo', userInfo)
       store.commit('setIsLogin', true)
@@ -243,16 +244,16 @@ router.beforeEach((to, from, next) => {
       localStorage.clear()
     }
   }
-  // 判断有无meta状态量，有则需要登录状态才能跳转，没有直接跳转
+  // to and from are Route Object,next() must be called to resolve the hook
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const isLogin = store.state.isLogin
-    // 需要用户登录的页面
+    // 需要用户登录的页面进行区别
     if (isLogin) {
-      // 已经登录状态
-      // 权限判断meta元数据
+      // 已经登录的状态
+      // 权限判断，meta元数据
       next()
     } else {
-      // 未登录状态
+      // 未登录的状态
       next('/login')
     }
   } else {
