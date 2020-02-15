@@ -211,6 +211,7 @@ export default {
     },
     add (val) {
       this.content = val
+      // 保存帖子内容到缓存
       const saveData = {
         title: this.title,
         cataIndex: this.cataIndex,

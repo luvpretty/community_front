@@ -86,10 +86,20 @@
               </dd>
               <hr style="margin: 5px 0;" />
               <dd>
-                <a href="javascript: void(0)" style="text-align: center;" @click="logout()">退出</a>
+                <a href="javascript: void(0)"
+                style="text-align: center;" @click="logout()">退出</a>
               </dd>
             </dl>
           </li>
+          <div class="fly-nav-msg" v-show="num.message && num.message !== 0">{{num.message}}</div>
+          <transition name="fade">
+                <div class="layui-layer-tips" v-show="hasMsg" >
+                <div class="layui-layer-content">
+                  您有{{num.message}}条未读消息
+                  <i class="layui-layer-TipsG layui-layer-TipsB"></i>
+                </div>
+              </div>
+          </transition>
         </template>
       </ul>
     </div>
@@ -97,12 +107,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Header',
   data () {
     return {
       isHover: false,
-      hoverCtrl: {}
+      hoverCtrl: {},
+      hasMsg: false
     }
   },
   methods: {
@@ -130,7 +142,24 @@ export default {
       }, () => { })
     }
   },
+  watch: {
+    num (newval, oldval) {
+      if (newval !== oldval) {
+        this.hasMsg = true
+        setTimeout(() => {
+          this.hasMsg = false
+        }, 2000)
+      }
+    }
+  },
   computed: {
+    // num () {
+    //  return this.$store.state.num
+    // }
+    // 等价于
+    ...mapState({
+      num: state => state.num
+    }),
     isShow () {
       return this.$store.state.isLogin
     },
@@ -150,5 +179,15 @@ export default {
   left: -15px;
   top: -10px;
   margin-left: 15px;
+}
+.layui-layer-tips {
+  position: absolute;
+  white-space: nowrap;
+  right: 80px;
+  top: 60px;
+  z-index: 2000;
+}
+.msg {
+  position: relative;
 }
 </style>
