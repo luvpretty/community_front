@@ -2,7 +2,7 @@
   <div class="fly-header layui-bg-black">
     <div class="layui-container">
       <a class="fly-logo" href="/">
-        <img src="../assets/logo.png" alt="layui" />
+        <img src="../assets/logo.jpg" style="width: 110px" alt="layui" />
       </a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <li class="layui-nav-item layui-this">
@@ -91,9 +91,9 @@
               </dd>
             </dl>
           </li>
-          <div class="fly-nav-msg" v-show="num.message && num.message !== 0">{{num.message}}</div>
+          <div class="fly-nav-msg" v-show="num.message && num.message != 0 ">{{num.message}}</div>
           <transition name="fade">
-                <div class="layui-layer-tips" v-show="hasMsg" >
+              <div class="layui-layer-tips"  v-show="hasMsg">
                 <div class="layui-layer-content">
                   您有{{num.message}}条未读消息
                   <i class="layui-layer-TipsG layui-layer-TipsB"></i>
@@ -114,7 +114,8 @@ export default {
     return {
       isHover: false,
       hoverCtrl: {},
-      hasMsg: false
+      hasMsg: false,
+      Msg: 0
     }
   },
   methods: {
@@ -144,7 +145,7 @@ export default {
   },
   watch: {
     num (newval, oldval) {
-      if (newval !== oldval) {
+      if (newval.event && newval !== oldval) {
         this.hasMsg = true
         setTimeout(() => {
           this.hasMsg = false
@@ -153,10 +154,6 @@ export default {
     }
   },
   computed: {
-    // num () {
-    //  return this.$store.state.num
-    // }
-    // 等价于
     ...mapState({
       num: state => state.num
     }),

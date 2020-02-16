@@ -6,7 +6,7 @@ class WebSocketClient {
       url: '127.0.0.1',
       port: '3001',
       protocol: 'ws',
-      timeInterval: 5 * 1000
+      timeInterval: 30 * 1000
     }
     const finalConfig = { ...defautConfig, ...config }
     this.ws = {}
@@ -45,12 +45,9 @@ class WebSocketClient {
     var obj = JSON.parse(event.data)
     switch (obj.event) {
       case 'noauth':
-        // 鉴权失败
-        // 路由跳转到 /login 重新获取token
         break
       case 'heartbeat':
         this.checkServer() // timeInterval + t
-        // 可以注释掉以下心跳状态，主动测试服务端是否会断开客户端的连接
         this.ws.send(JSON.stringify({
           event: 'heartbeat',
           message: 'pong'

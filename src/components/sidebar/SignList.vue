@@ -1,8 +1,7 @@
 <template>
         <div class="modal" v-show="isShow">
            <div class="mask" @click="close()"></div>
-           <div class="layui-layer layui-layer-page"
-            :class="{'active': ShowList}">
+           <div class="layui-layer layui-layer-page">
               <div class="layui-layer-title">
                 签到活跃榜 - TOP
                 <i class="layui-icon

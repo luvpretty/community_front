@@ -39,6 +39,9 @@ const getCommentList = (data) => axios.get('/public/latest-comment?' + qs.string
 // 获取用户未读消息
 const getMsg = (data) => axios.get('/user/getmsg?' + qs.stringify(data))
 
+// 设置用户未读消息
+const setMsg = (data) => axios.get('/user/setmsg?' + qs.stringify(data))
+
 export {
   userSign,
   updateUserInfo,
@@ -51,5 +54,6 @@ export {
   getInfo,
   getCommentList,
   getPostPublic,
-  getMsg
+  getMsg,
+  setMsg
 }

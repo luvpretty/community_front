@@ -1,39 +1,10 @@
-# The Login and Registry Module
+# 全栈爱好者社区BBS
+# 简介
+1. 全栈爱好者社区是一款使用JavaScript编写的简易社区系统。
+2. 采用前后端分离的机制实现。前台项目通过http访问RSETFulAPI获取信息渲染页面。
+3. 项目技术分层明显，模块分离，采用vue + koa分别构建前后端项目。
+4. 前台页面来自Layui的开源社区模版。
+# 社区功能结构图
 
-## Project setup
-```
-npm install 
-or
-yarn add
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-or
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-or
-yarn build
-```
-
-### Run your tests
-```
-npm run test
-or
-yarn test
-```
-
-### Lints and fixes files
-```
-npm run lint
-or
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 技术选型
+# 社区功能
