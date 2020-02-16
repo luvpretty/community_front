@@ -6,5 +6,14 @@
 4. 前台页面来自Layui的开源社区模版。
 # 社区功能结构图
 ![](https://github.com/luvpretty/community_front/blob/master/src/assets/mind.png)
+# 社区功能截图
+## 社区首页
 # 技术选型
-# 社区功能
+## 前端
+- 框架: vue全家桶(vue,vuex,vue-router)
+- UI组件: layui
+- 打包工具: webpack
+## 后端
+- web框架: koa
+- 数据库: mongodb,redis
+
