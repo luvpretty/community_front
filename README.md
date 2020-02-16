@@ -5,6 +5,6 @@
 3. 项目技术分层明显，模块分离，采用vue + koa分别构建前后端项目。
 4. 前台页面来自Layui的开源社区模版。
 # 社区功能结构图
-
+![](https://github.com/luvpretty/community_front/blob/master/src/assets/mind.png)
 # 技术选型
 # 社区功能
