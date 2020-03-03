@@ -14,3 +14,6 @@
 - web框架: koa
 - 数据库: mongodb,redis
 
+## 运行方式
+搭配后端api一同使用
+前端运行: yarn serve
